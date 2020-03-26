@@ -1,0 +1,10 @@
+.ship-selector {
+  overflow: auto;
+  height: 100%;
+}
+
+.ship-template-row {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: $max-width / 11;
+}

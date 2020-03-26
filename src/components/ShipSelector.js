@@ -1,16 +1,16 @@
-import React from "react";
+import React, {Fragment} from "react";
 import {Ship} from "./Ship";
 
 const shipSize1 = [
     {
-        mutations: 1,
+        mutations: 0,
         template: [[1]]
     }
 ];
 
 const shipSize2 = [
     {
-        mutations: 2,
+        mutations: 1,
         template: [
             [1],
             [1]
@@ -18,9 +18,9 @@ const shipSize2 = [
     },
 ];
 
-const ShipSize3 = [
+const shipSize3 = [
     {
-        mutations: 2,
+        mutations: 1,
         template: [
             [1],
             [1],
@@ -28,7 +28,7 @@ const ShipSize3 = [
         ]
     },
     {
-        mutations: 4,
+        mutations: 3,
         template: [
             [1, 1],
             [1, 0]
@@ -36,16 +36,16 @@ const ShipSize3 = [
     },
 ];
 
-const ShipSize4 = [
+const shipSize4 = [
     {
-        mutations: 1,
+        mutations: 0,
         template: [
             [1, 1],
             [1, 1],
         ]
     },
     {
-        mutations: 2,
+        mutations: 1,
         template: [
             [1],
             [1],
@@ -54,31 +54,38 @@ const ShipSize4 = [
         ]
     },
     {
-        mutations: 4,
+        mutations: 3,
         template: [
             [1, 1, 1],
             [1, 0, 0]
         ]
     },
     {
-        mutations: 4,
+        mutations: 3,
         template: [
             [1, 0, 0],
             [1, 1, 1]
         ]
     },
     {
-        mutations: 4,
+        mutations: 3,
         template: [
             [0, 1, 0],
             [1, 1, 1]
         ]
     },
     {
-        mutations: 2,
+        mutations: 1,
         template: [
             [1, 1, 0],
             [0, 1, 1]
+        ]
+    },
+    {
+        mutations: 1,
+        template: [
+            [0, 1, 1],
+            [1, 1, 0]
         ]
     }
 ];
@@ -96,9 +103,43 @@ export const rotateTemplate90deg = (template) => {
     }
 
     return rotatedTemplate;
-
 };
 
+export const createAllShipPermutations = (shipTemplates) => {
+    return shipTemplates.map(({template, mutations}) => {
+        let rotations = [template]
+        for (let i = 0; i < mutations; i++) {
+            rotations.push(rotateTemplate90deg(rotations[i]))
+        }
+        return rotations
+    })
+};
+
+function ShipTemplateRow({templates}) {
+    return (
+        <div className="ship-template-row">
+            {templates.map(shipTemplate => <Ship ship={shipTemplate}/>)}
+        </div>
+    )
+}
+
 export function ShipSelector() {
-    return <Ship ship={[]}/>
+    const allShip1 = createAllShipPermutations(shipSize1);
+    const allShip2 = createAllShipPermutations(shipSize2);
+    const allShip3 = createAllShipPermutations(shipSize3);
+    const allShip4 = createAllShipPermutations(shipSize4);
+    return (
+        <div className="ship-selector">
+            {allShip1.map((templates, i) => <ShipTemplateRow key={i} templates={templates}/>)}
+
+            {allShip2.map((templates, i) => <ShipTemplateRow key={i} templates={templates}/>)}
+
+            {allShip3.map((templates, i) => <ShipTemplateRow key={i} templates={templates}/>)}
+
+            {allShip4.map((templates, i) => <ShipTemplateRow key={i} templates={templates}/>)}
+
+        </div>
+
+    )
+
 }
