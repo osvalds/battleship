@@ -27,18 +27,18 @@ const centerOffset = (template) => {
 };
 
 const inBounds = (x, y, template) => {
-  const rows = template.length;
-  const cols = template[0].length;
+    const rows = template.length;
+    const cols = template[0].length;
 
-  if (x < 0 || y < 0) {
-      return "red";
-  }
+    if (x < 0 || y < 0) {
+        return "red";
+    }
 
-  if(rows + y < 11 && cols + x < 11) {
-      return "green";
-  } else {
-      return "red";
-  }
+    if (rows + y < 11 && cols + x < 11) {
+        return "green";
+    } else {
+        return "red";
+    }
 };
 
 function App() {
@@ -93,7 +93,18 @@ function App() {
         setDraggedShip(newDragged)
 
 
-    }, [draggedShip, setDraggedShip, hoveredCell])
+    }, [draggedShip, setDraggedShip, hoveredCell]);
+
+    const handleOnMouseUp = useCallback(() => {
+        if (draggedShip !== null && draggedShip.isSnapping && draggedShip.inBounds === "green") {
+            let newPlaced = [...placedShips]
+            // add board validation here
+            setPlacedShips(newPlaced.concat([{...draggedShip}]))
+            setDraggedShip(null);
+        } else {
+            setDraggedShip(null);
+        }
+    }, [draggedShip, placedShips, setDraggedShip, setPlacedShips])
 
     return (
         <div className="App"
@@ -110,7 +121,7 @@ function App() {
                      // }
                  }
              }}
-             onMouseUp={e => setDraggedShip(null)}
+             onMouseUp={handleOnMouseUp}
         >
             <Board placedShips={placedShips}
                    handleCellMouseEnter={handleCellMouseEnter}
