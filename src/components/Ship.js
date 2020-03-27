@@ -1,11 +1,9 @@
 import React, {useState} from "react";
 
-function ShipContent({ship, setDraggedShip}) {
+function ShipContent({ship, setDraggedShip, cellSize = 10, gap = 1}) {
+    // console.log("ship", ship)
     const rows = ship.length;
     const cols = ship[0].length;
-
-    const cellSize = 10;
-    const gap = 1;
 
     const containerWidth = cellSize * cols + cols - 1;
     const containerHeight = cellSize * rows + rows - 1;
@@ -69,7 +67,5 @@ export function Ship({ship, setDraggedShip}) {
     } else {
         return <ShipContent ship={ship} setDraggedShip={setDraggedShip}/>
     }
-
-
 
 }

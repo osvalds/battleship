@@ -136,11 +136,16 @@ export function ShipSelector({setDraggedShip}) {
                                                              setDraggedShip={setDraggedShip}
                                                              templates={templates}/>)}
 
-            {/*{allShip2.map((templates, i) => <ShipTemplateRow key={i} templates={templates}/>)}*/}
+            {allShip2.map((templates, i) => <ShipTemplateRow key={i}
+                                                             setDraggedShip={setDraggedShip}
+                                                             templates={templates}/>)}
 
-            {/*{allShip3.map((templates, i) => <ShipTemplateRow key={i} templates={templates}/>)}*/}
+            {allShip3.map((templates, i) => <ShipTemplateRow key={i}
+                                                             setDraggedShip={setDraggedShip}
+                                                             templates={templates}/>)}
 
-            {allShip4.map((templates, i) => <ShipTemplateRow key={i} templates={templates}
+            {allShip4.map((templates, i) => <ShipTemplateRow key={i}
+                                                             templates={templates}
                                                              setDraggedShip={setDraggedShip}/>)}
 
         </div>
