@@ -39,11 +39,22 @@ export function Board() {
         setHoveredCell({x, y});
     }, [setHoveredCell]);
 
+    function getRandomColor() {
+        var letters = '0123456789ABCDEF';
+        var color = '#';
+        for (var i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        // return color;
+        return "transparent"
+    }
+
+
     return (
         <div>
             <div className="board"
                  onMouseEnter={e => console.log("board mouse enter")}
-            onMouseMove={e => console.log("board mouse move")}>
+                 onMouseMove={e => console.log("board mouse move")}>
                 <svg viewBox={`0 0 ${containerWidth} ${containerHeight}`}
                      ref={boardRef}
                      onMouseMove={handleMouseMove}
@@ -51,47 +62,65 @@ export function Board() {
                      xmlns="http://www.w3.org/2000/svg">
                     {colNames.map((letter, index) => {
                         return (
-                            <text
-                                key={letter}
-                                x={(index + 1) * cellSize + (index * gap)}
-                                y={cellSize}
-                                transform="translate(3,-2)"
-                                textLength={cellSize}
-                                fill="white"
-                                style={{fontSize: "9"}}
-                                onMouseEnter={() => handleCellMouseEnter({x: -1, y: -1})}
-                            >
-                                {letter}
-                            </text>
+                            <g key={letter}>
+                                <rect stroke={getRandomColor()}
+                                      fill="transparent"
+                                      x={(index + 1) * cellSize + ((index + 1) * gap)}
+                                      y="0"
+                                      width={cellSize}
+                                      height={cellSize}
+                                      onMouseEnter={() => handleCellMouseEnter({x: -1, y: -1})}
+                                />
+                                <text
+                                    x={(index + 1) * cellSize + (index * gap)}
+                                    y={cellSize}
+                                    transform="translate(3,-2)"
+                                    textLength={cellSize}
+                                    fill="white"
+                                    style={{fontSize: "9"}}
+                                >
+                                    {letter}
+                                </text>
+                            </g>
                         )
                     })}
                     {rowNames.map((num, index) => {
                         return (
-                            <text key={num}
-                                  x="0"
-                                  y={(index + 2) * cellSize + (index * gap)}
-                                  textLength={cellSize}
-                                  fill="white"
-                                  transform="translate(0,-2)"
-                                  onMouseEnter={() => handleCellMouseEnter({x: -1, y: -1})}
-                                  style={{fontSize: "9"}}>
-                                {num}
-                            </text>
+                            <g key={num}>
+                                <rect stroke={getRandomColor()}
+                                      fill="transparent"
+                                      x="0"
+                                      y={(index + 1) * cellSize + ((index + 1) * gap)}
+                                      width={cellSize}
+                                      height={cellSize}
+                                      onMouseEnter={() => handleCellMouseEnter({x: -1, y: -1})}
+                                />
+                                <text x="0"
+                                      y={(index + 2) * cellSize + (index * gap)}
+                                      textLength={cellSize}
+                                      fill="white"
+                                      transform="translate(0,-2)"
+                                      onMouseEnter={() => handleCellMouseEnter({x: -1, y: -1})}
+                                      style={{fontSize: "9"}}>
+                                    {num}
+                                </text>
+                            </g>
                         )
                     })}
 
-                        {colNames.map((letter, x) => {
-                            return rowNames.map((num, y) => {
-                                return (<rect key={`${letter}:${num}`}
-                                              fill="white"
-                                              x={(x + 1) * cellSize + ((x + 1) * gap)}
-                                              y={(y + 1) * cellSize + ((y + 1) * gap)}
-                                              width={cellSize}
-                                              height={cellSize}
-                                              onMouseEnter={() => handleCellMouseEnter({x: x, y: y})}
-                                />)
-                            })
-                        })}
+                    {colNames.map((letter, x) => {
+                        return rowNames.map((num, y) => {
+                            return (<rect key={`${letter}:${num}`}
+                                          stroke={getRandomColor()}
+                                          fill="white"
+                                          x={(x + 1) * cellSize + ((x + 1) * gap)}
+                                          y={(y + 1) * cellSize + ((y + 1) * gap)}
+                                          width={cellSize}
+                                          height={cellSize}
+                                          onMouseEnter={() => handleCellMouseEnter({x: x, y: y})}
+                            />)
+                        })
+                    })}
 
                 </svg>
             </div>
