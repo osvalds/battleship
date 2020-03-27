@@ -106,6 +106,12 @@ function App() {
         }
     }, [draggedShip, placedShips, setDraggedShip, setPlacedShips])
 
+    const handleDraggingOnPlacedShip = useCallback((ship) => {
+        let newPlaced = placedShips.filter(sh => sh.uuid !== ship.uuid);
+        setDraggedShip(ship);
+        setPlacedShips(newPlaced);
+    }, [draggedShip, placedShips]);
+
     return (
         <div className="App"
              onMouseDown={e => {
@@ -125,6 +131,7 @@ function App() {
         >
             <Board placedShips={placedShips}
                    handleCellMouseEnter={handleCellMouseEnter}
+                   handlePlacedShipDragging={handleDraggingOnPlacedShip}
                    draggedShip={draggedShip}
                    hoveredCell={hoveredCell}
                    draggingPosition={draggingPosition}/>

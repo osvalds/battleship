@@ -2,9 +2,9 @@ import React, {useCallback, useEffect, useRef, useState} from "react";
 import {getRandomColor} from "../core/util";
 import {Ship} from "./Ship";
 
-function BoardShip({x, y, template, cellSize = 10, gap = 1}) {
+function BoardShip({x, y, template, cellSize = 10, gap = 1, handleMouseDown}) {
     return (
-        <g>
+        <g onMouseDown={handleMouseDown}>
             {template.map((row, ys) => row.map((cell, xs) => {
                 if (cell) {
                     return (
@@ -25,7 +25,7 @@ function BoardShip({x, y, template, cellSize = 10, gap = 1}) {
     )
 }
 
-export function Board({placedShips, draggingPosition, handleCellMouseEnter, hoveredCell, draggedShip}) {
+export function Board({placedShips, draggingPosition, handleCellMouseEnter, hoveredCell, draggedShip, handlePlacedShipDragging}) {
     const boardCols = 11; // 10 cols + 1 for number
     const boardRows = 11; // 10 rows + 1 for letter
 
@@ -147,7 +147,10 @@ export function Board({placedShips, draggingPosition, handleCellMouseEnter, hove
                         })}
                     </g>
                     {
-                        placedShips.map(ship => <BoardShip template={ship.template} x={ship.x} y={ship.y}/>)
+                        placedShips.map(ship => <BoardShip template={ship.template}
+                                                           handleMouseDown={() => handlePlacedShipDragging(ship)}
+                                                           x={ship.x}
+                                                           y={ship.y}/>)
                     }
                     {draggedShip && draggedShip.isSnapping &&
                     <g style={{
