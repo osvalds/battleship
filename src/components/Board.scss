@@ -1,4 +1,9 @@
 $max-width: 400px;
 .board {
+  user-select: none;
   max-width: $max-width;
+}
+
+.debug {
+  color: white;
 }

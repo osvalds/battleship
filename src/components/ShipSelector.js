@@ -115,28 +115,33 @@ export const createAllShipPermutations = (shipTemplates) => {
     })
 };
 
-function ShipTemplateRow({templates}) {
+function ShipTemplateRow({templates, setDraggedShip}) {
     return (
         <div className="ship-template-row">
-            {templates.map(shipTemplate => <Ship ship={shipTemplate}/>)}
+            {templates.map(shipTemplate => <Ship ship={shipTemplate}
+                                                 setDraggedShip={setDraggedShip}/>)}
         </div>
     )
 }
 
-export function ShipSelector() {
+export function ShipSelector({setDraggedShip}) {
     const allShip1 = createAllShipPermutations(shipSize1);
     const allShip2 = createAllShipPermutations(shipSize2);
     const allShip3 = createAllShipPermutations(shipSize3);
     const allShip4 = createAllShipPermutations(shipSize4);
     return (
+        // null
         <div className="ship-selector">
-            {allShip1.map((templates, i) => <ShipTemplateRow key={i} templates={templates}/>)}
+            {allShip1.map((templates, i) => <ShipTemplateRow key={i}
+                                                             setDraggedShip={setDraggedShip}
+                                                             templates={templates}/>)}
 
-            {allShip2.map((templates, i) => <ShipTemplateRow key={i} templates={templates}/>)}
+            {/*{allShip2.map((templates, i) => <ShipTemplateRow key={i} templates={templates}/>)}*/}
 
-            {allShip3.map((templates, i) => <ShipTemplateRow key={i} templates={templates}/>)}
+            {/*{allShip3.map((templates, i) => <ShipTemplateRow key={i} templates={templates}/>)}*/}
 
-            {allShip4.map((templates, i) => <ShipTemplateRow key={i} templates={templates}/>)}
+            {allShip4.map((templates, i) => <ShipTemplateRow key={i} templates={templates}
+                                                             setDraggedShip={setDraggedShip}/>)}
 
         </div>
 

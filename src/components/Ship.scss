@@ -2,6 +2,12 @@
   width: 100%;
   border: 1px solid red;
 
+  svg {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
   &--1 {
     max-width: $max-width / 11;
   }
@@ -16,5 +22,10 @@
 
   &--4 {
     max-width: $max-width / 11 * 4;
+  }
+
+  &--dragged-true {
+    position: fixed;
+    transform: translate(-50%, -50%);
   }
 }
