@@ -41,6 +41,18 @@ const inBounds = (x, y, template) => {
     }
 };
 
+const placedShipsToBoard = () => {
+
+}
+
+const calculateOffset = (shipTemplate, x, y) => {
+    if (x === -1 && y === -1) {
+        return centerOffset(shipTemplate)
+    } else {
+        return {x, y}
+    }
+};
+
 function App() {
     const [placedShips, setPlacedShips] = useState([]);
     const [draggedShip, setDraggedShip] = useState(null);
@@ -57,9 +69,11 @@ function App() {
 
     }, [setPlacedShips, placedShips, setDraggedShip]);
 
-    const handleDraggedShip = useCallback((shipTemplate) => {
+    const handleDraggedShip = useCallback((shipTemplate, x, y) => {
+
         const shipUUID = uuidv4();
-        const offset = centerOffset(shipTemplate);
+
+        const offset = calculateOffset(shipTemplate, x, y)
 
         setDraggedShip({
             template: shipTemplate,
@@ -96,18 +110,23 @@ function App() {
     }, [draggedShip, setDraggedShip, hoveredCell]);
 
     const handleOnMouseUp = useCallback(() => {
+
         if (draggedShip !== null && draggedShip.isSnapping && draggedShip.inBounds === "green") {
-            let newPlaced = [...placedShips]
+            let newPlaced = [...placedShips];
             // add board validation here
-            setPlacedShips(newPlaced.concat([{...draggedShip}]))
+            setPlacedShips(newPlaced.concat([{...draggedShip}]));
             setDraggedShip(null);
+            setDraggingPosition({x: -1000, y: -1000})
         } else {
+            setDraggingPosition({x: -1000, y: -1000})
             setDraggedShip(null);
         }
-    }, [draggedShip, placedShips, setDraggedShip, setPlacedShips])
+    }, [draggedShip, placedShips, setDraggedShip, setPlacedShips, setDraggingPosition])
 
-    const handleDraggingOnPlacedShip = useCallback((ship) => {
+    const handleDraggingOnPlacedShip = useCallback((ship, x, y) => {
         let newPlaced = placedShips.filter(sh => sh.uuid !== ship.uuid);
+
+        ship.offset = calculateOffset(ship.template, x, y);
         setDraggedShip(ship);
         setPlacedShips(newPlaced);
     }, [draggedShip, placedShips]);
@@ -123,7 +142,7 @@ function App() {
 
                      // if (hoveredCell.x > -1 && hoveredCell.y > -1) {
                      handleDraggedShipSnapping()
-                     console.log("entered board")
+                     // console.log("entered board")
                      // }
                  }
              }}

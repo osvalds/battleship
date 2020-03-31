@@ -1,14 +1,18 @@
-import React, {useCallback, useEffect, useRef, useState} from "react";
+import React, {useCallback, useEffect, useMemo, useRef, useState} from "react";
 import {getRandomColor} from "../core/util";
 import {Ship} from "./Ship";
 
 function BoardShip({x, y, template, cellSize = 10, gap = 1, handleMouseDown}) {
     return (
-        <g onMouseDown={handleMouseDown}>
+        <g onMouseDown={() => handleMouseDown(-1, -1)}>
             {template.map((row, ys) => row.map((cell, xs) => {
                 if (cell) {
                     return (
                         <rect
+                            onMouseDown={e => {
+                                handleMouseDown(xs, ys)
+                                e.stopPropagation()
+                            }}
                             // fill="#CF649A"
                             x={(x + xs + 1) * cellSize + ((x + xs + 1) * gap)}
                             y={(y + ys + 1) * cellSize + ((y + ys + 1) * gap)}
@@ -24,6 +28,16 @@ function BoardShip({x, y, template, cellSize = 10, gap = 1, handleMouseDown}) {
         </g>
     )
 }
+
+const getTransform = (template, x, y) => {
+    const rows = template.length;
+    const cols = template[0].length;
+
+    const colStep = 100 / cols;
+    const rowStep = 100 / rows;
+
+    return `translate(-${colStep / 2 + colStep * x}%, -${rowStep / 2 + rowStep * y}%)`
+};
 
 export function Board({placedShips, draggingPosition, handleCellMouseEnter, hoveredCell, draggedShip, handlePlacedShipDragging}) {
     const boardCols = 11; // 10 cols + 1 for number
@@ -51,10 +65,6 @@ export function Board({placedShips, draggingPosition, handleCellMouseEnter, hove
     const handleMouseMove = useCallback((e) => {
     }, []);
 
-
-    // const draggedShip = placedShips.filter(ship => ship.isDragging)[0]
-    // const commitedShips = placedShips.filter(ship => !ship.isDragging)
-    // console.log("draggedShip", draggedShip)
     return (
         <div>
             <div className="board"
@@ -68,7 +78,7 @@ export function Board({placedShips, draggingPosition, handleCellMouseEnter, hove
                     left: draggingPosition.x,
                     top: draggingPosition.y,
                     pointerEvents: "none",
-                    transform: "translate(-50%, -50%)"
+                    transform: getTransform(draggedShip.template, draggedShip.offset.x, draggedShip.offset.y)
                 }}>
                     <Ship ship={draggedShip.template}/>
                 </div>}
@@ -148,20 +158,18 @@ export function Board({placedShips, draggingPosition, handleCellMouseEnter, hove
                     </g>
                     {
                         placedShips.map(ship => <BoardShip template={ship.template}
-                                                           handleMouseDown={() => handlePlacedShipDragging(ship)}
+                                                           handleMouseDown={(x, y) => handlePlacedShipDragging(ship, x, y)}
                                                            x={ship.x}
                                                            y={ship.y}/>)
                     }
                     {draggedShip && draggedShip.isSnapping &&
                     <g style={{
-                        // position: "fixed",
-                        // left: draggingPosition.x,
-                        // top: draggingPosition.y,
                         pointerEvents: "none",
                         fill: draggedShip.inBounds
-                        // transform: "translate(-50%, -50%)"
                     }}>
-                        <BoardShip template={draggedShip.template} x={draggedShip.x} y={draggedShip.y}/>
+                        <BoardShip template={draggedShip.template}
+                                   x={draggedShip.x}
+                                   y={draggedShip.y}/>
                     </g>}
 
                 </svg>

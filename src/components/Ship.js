@@ -1,44 +1,23 @@
-import React, {useState} from "react";
+import React, {useCallback, useState} from "react";
+import {getRandomColor} from "../core/util";
 
 function ShipContent({ship, setDraggedShip, cellSize = 10, gap = 1}) {
-    // console.log("ship", ship)
     const rows = ship.length;
     const cols = ship[0].length;
 
     const containerWidth = cellSize * cols + cols - 1;
     const containerHeight = cellSize * rows + rows - 1;
 
-    const [isDragged, setIsDragged] = useState(false);
-    const [position, setPosition] = useState({x: 0, y: 0});
+
+    const handleGrabbingShip = useCallback((x, y) => {
+        setDraggedShip(ship, x, y)
+    }, [setDraggedShip, ship]);
+
 
     return (
-        <div className={`ship ship--${cols} ship--dragged-${isDragged}`}
-             style={{
-                 // left: position.x,
-                 // top: position.y,
-             }}
+        <div className={`ship ship--${cols}`}
              onMouseDown={e => {
-                 console.log("mousedown");
-                 // setPosition({x: e.clientX, y: e.clientY})
-                 // setIsDragged(true)
-                 setDraggedShip(ship);
-             }}
-             onMouseUp={e => {
-                 console.log("mouseup");
-                 // setPosition({x: 0, y: 0})
-                 // setIsDragged(false)
-             }}
-             onMouseLeave={(e) => {
-                 console.log("Leave");
-                 // if (isDragged && (e.buttons === 1 || e.buttons === 3)) {
-                 //     setPosition({x: e.clientX, y: e.clientY})
-                 // }
-             }}
-             onMouseMove={(e) => {
-                 console.log("mouseMove");
-                 // if (isDragged && (e.buttons === 1 || e.buttons === 3)) {
-                 //     setPosition({x: e.clientX, y: e.clientY})
-                 // }
+                 handleGrabbingShip(-1, -1)
              }}>
             <svg viewBox={`0 0 ${containerWidth} ${containerHeight}`} xmlns="http://www.w3.org/2000/svg">
                 {ship.map((row, y) => row.map((cell, x) => {
@@ -46,10 +25,15 @@ function ShipContent({ship, setDraggedShip, cellSize = 10, gap = 1}) {
                         return (
                             <rect
                                 fill="#CF649A"
+                                stroke={getRandomColor()}
                                 x={(x) * cellSize + ((x) * gap)}
                                 y={(y) * cellSize + ((y) * gap)}
                                 width={cellSize}
                                 height={cellSize}
+                                onMouseDown={(e) => {
+                                    handleGrabbingShip(x, y);
+                                    e.stopPropagation();
+                                }}
                             />
                         )
                     } else {
