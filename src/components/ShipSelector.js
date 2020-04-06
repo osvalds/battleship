@@ -1,14 +1,15 @@
 import React, {Fragment} from "react";
 import {Ship} from "./Ship";
+import {getDimensions} from "../core/util";
 
-const shipSize1 = [
+export const shipSize1 = [
     {
         mutations: 0,
         template: [[1]]
     }
 ];
 
-const shipSize2 = [
+export  const shipSize2 = [
     {
         mutations: 1,
         template: [
@@ -18,7 +19,7 @@ const shipSize2 = [
     },
 ];
 
-const shipSize3 = [
+export  const  shipSize3 = [
     {
         mutations: 1,
         template: [
@@ -36,7 +37,7 @@ const shipSize3 = [
     },
 ];
 
-const shipSize4 = [
+export const shipSize4 = [
     {
         mutations: 0,
         template: [
@@ -91,8 +92,7 @@ const shipSize4 = [
 ];
 
 export const rotateTemplate90deg = (template) => {
-    const rows = template.length;
-    const cols = template[0].length;
+    const {rows, cols} = getDimensions(template);
 
     let rotatedTemplate = new Array(cols).fill().map(() => new Array(rows).fill(0));
 
@@ -114,6 +114,10 @@ export const createAllShipPermutations = (shipTemplates) => {
         return rotations
     })
 };
+
+export const allShipPermutationsFlat = (shipTemplates) => {
+    return createAllShipPermutations(shipTemplates).flat();
+}
 
 function ShipTemplateRow({templates, setDraggedShip, templateName}) {
     return (
@@ -148,7 +152,7 @@ export function ShipSelector({setDraggedShip}) {
                                                              templateName="allship3"
                                                              templates={templates}/>)}
 
-            {allShip4.map((templates, i) => <ShipTemplateRow key={`allship4-${i}`}
+            {[allShip4.flat()].map((templates, i) => <ShipTemplateRow key={`allship4-${i}`}
                                                              templates={templates}
                                                              templateName="allship4"
                                                              setDraggedShip={setDraggedShip}/>)}

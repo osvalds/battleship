@@ -1,12 +1,16 @@
 import React, {useCallback, useState} from 'react';
 import './App.scss';
 import {Board} from "./components/Board";
-import {ShipSelector} from "./components/ShipSelector";
+import {
+    allShipPermutationsFlat,
+    ShipSelector,
+    shipSize1,
+    shipSize2, shipSize3, shipSize4
+} from "./components/ShipSelector";
 import {getDimensions, uuidv4} from "./core/util";
 
 const centerOffset = (template) => {
-    const rows = template.length;
-    const cols = template[0].length;
+    const {rows, cols} = getDimensions(template);
 
     return {
         x: Math.floor((cols - 1) / 2),
@@ -14,9 +18,14 @@ const centerOffset = (template) => {
     }
 };
 
+function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 const inBounds = (x, y, template) => {
-    const rows = template.length;
-    const cols = template[0].length;
+    const {rows, cols} = getDimensions(template);
 
     if (x < 0 || y < 0) {
         return false;
@@ -27,7 +36,7 @@ const inBounds = (x, y, template) => {
 
 const placeShipOnBoard = (ship, board) => {
     const {x, y, template} = ship;
-    const {rows, cols} = getDimensions(template)
+    const {rows, cols} = getDimensions(template);
 
     for (let i = 0; i < rows; i++) {
         for (let j = 0; j < cols; j++) {
@@ -48,19 +57,20 @@ const placedShipsToBoard = (placedShips) => {
 
 const neighborDiff = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]];
 
-const isOverlapping = (x, y, template, placedShips) => {
-    const board = placedShipsToBoard(placedShips);
+const isOverlapping = (x, y, template, placedShips, board = placedShipsToBoard(placedShips)) => {
     const {rows, cols} = getDimensions(template);
 
     for (let i = 0; i < rows; i++) {
         for (let j = 0; j < cols; j++) {
-            for (let [xd, yd] of neighborDiff) {
-                const ny = i + y + yd;
-                const nx = j + x + xd;
-                if (ny > -1 && ny < 10 &&
-                    nx > -1 && ny < 10 &&
-                    board[ny][nx] > 0) {
-                    return true;
+            if (template[i][j]) {
+                for (let [xd, yd] of neighborDiff) {
+                    const ny = i + y + yd;
+                    const nx = j + x + xd;
+                    if (ny > -1 && ny < 10 &&
+                        nx > -1 && ny < 10 &&
+                        board[ny][nx] > 0) {
+                        return true;
+                    }
                 }
             }
         }
@@ -159,6 +169,81 @@ function App() {
         setPlacedShips(newPlaced);
     }, [placedShips]);
 
+    const getAllValidPositions = (board, template) => {
+        const positions = [];
+
+        for (let y = 0; y < 10; y++) {
+            for (let x = 0; x < 10; x++) {
+                if (inBounds(x, y, template) && !isOverlapping(x, y, template, [], board)) {
+                    positions.push([x, y]);
+                }
+            }
+        }
+
+        return positions;
+    };
+
+    const fillBoardWithRandom = () => {
+        let board = new Array(10).fill().map(() => new Uint8Array(10))
+
+        const allShip1 = allShipPermutationsFlat(shipSize1);
+        const allShip2 = allShipPermutationsFlat(shipSize2);
+        const allShip3 = allShipPermutationsFlat(shipSize3);
+        const allShip4 = allShipPermutationsFlat(shipSize4);
+        const allTemplates = [allShip1, allShip2, allShip3, allShip4];
+        const chosenTemplates = [];
+        const placedShips = [];
+
+
+        for (let i = 0; i < 4; i++) {
+            for (let j = 0; j < 4 - i; j++) {
+                const r = getRandomInt(0, allTemplates[i].length - 1);
+                chosenTemplates.push(allTemplates[i][r])
+            }
+        }
+
+        for (let i = 9; i >= 0; i--) {
+            const validPositions = getAllValidPositions(board, chosenTemplates[i]);
+            const [cx, cy] = validPositions[getRandomInt(0, validPositions.length - 1)];
+            placedShips.push({
+                uuid: uuidv4(),
+                x: cx,
+                y: cy,
+                template: chosenTemplates[i],
+                offset: {x: 0, y: 0},
+                inBounds: true,
+                isOverlapping: false,
+                isDragging: false,
+                isSnapping: true
+            });
+
+            placeShipOnBoard({
+                x: cx,
+                y: cy,
+                template: chosenTemplates[i]
+            }, board);
+        }
+
+        setPlacedShips(placedShips);
+    };
+
+
+    // for internal board algorithm testing
+    const tryLots = () => {
+        let results = [];
+        for (let i = 0; i < 10000; i++) {
+            let t1 = performance.now();
+            fillBoardWithRandom()
+            let t2 = performance.now();
+            results.push(t2 - t1);
+        }
+        let sum = results.reduce((previous, current) => current += previous);
+        let avg = sum / results.length;
+        console.log(`avg: ${avg} ms`);
+        console.log(`sum: ${sum} ms`);
+    };
+
+
     return (
         <div className="App"
              onMouseDown={e => {
@@ -166,12 +251,13 @@ function App() {
              }}
              onMouseMove={(e) => {
                  if (draggedShip !== null && (e.buttons === 1 || e.buttons === 3)) {
-                     setDraggingPosition({x: e.clientX, y: e.clientY})
+                     setDraggingPosition({x: e.clientX, y: e.clientY});
                      handleDraggedShipSnapping()
                  }
              }}
              onMouseUp={handleOnMouseUp}
         >
+            <button onClick={fillBoardWithRandom}>Random layout</button>
             <Board placedShips={placedShips}
                    handleCellMouseEnter={handleCellMouseEnter}
                    handlePlacedShipDragging={handleDraggingOnPlacedShip}
