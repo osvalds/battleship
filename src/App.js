@@ -55,7 +55,7 @@ const placedShipsToBoard = (placedShips) => {
     return board;
 };
 
-const neighborDiff = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]];
+const neighborDiff = [[-1, -1], [-1, 0], [-1, 1], [0, 0], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]];
 
 const isOverlapping = (x, y, template, placedShips, board = placedShipsToBoard(placedShips)) => {
     const {rows, cols} = getDimensions(template);
