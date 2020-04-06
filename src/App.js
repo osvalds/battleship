@@ -144,15 +144,25 @@ function App() {
     }, [draggedShip, setDraggedShip, hoveredCell]);
 
     const handleOnMouseUp = useCallback(() => {
-        if (draggedShip?.isSnapping && draggedShip.inBounds &&
+        if (draggedShip?.isSnapping &&
+            draggedShip.inBounds &&
             !draggedShip.isOverlapping) {
             let newPlaced = [...placedShips];
 
-            // add board validation here
             setPlacedShips(newPlaced.concat([{...draggedShip}]));
+
             setDraggedShip(null);
             setDraggingPosition({x: -1000, y: -1000})
         } else {
+            if (draggedShip?.lastValidPosition && draggedShip.inBounds) {
+                let newPlaced = [...placedShips];
+
+                setPlacedShips(newPlaced.concat([{
+                    ...draggedShip,
+                    x: draggedShip.lastValidPosition.x,
+                    y: draggedShip.lastValidPosition.y
+                }]));
+            }
             setDraggingPosition({x: -1000, y: -1000});
             setDraggedShip(null);
         }
@@ -162,6 +172,8 @@ function App() {
         let newPlaced = placedShips.filter(sh => sh.uuid !== ship.uuid);
 
         ship.offset = calculateOffset(ship.template, x, y);
+        ship.lastValidPosition = {x: ship.x, y: ship.y};
+
         setDraggedShip(ship);
         setPlacedShips(newPlaced);
     }, [draggedShip, placedShips]);
