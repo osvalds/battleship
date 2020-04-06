@@ -9,7 +9,7 @@ export const shipSize1 = [
     }
 ];
 
-export  const shipSize2 = [
+export const shipSize2 = [
     {
         mutations: 1,
         template: [
@@ -19,7 +19,7 @@ export  const shipSize2 = [
     },
 ];
 
-export  const  shipSize3 = [
+export const shipSize3 = [
     {
         mutations: 1,
         template: [
@@ -123,8 +123,8 @@ function ShipTemplateRow({templates, setDraggedShip, templateName}) {
     return (
         <div className="ship-template-row">
             {templates.map((shipTemplate, i) => <Ship ship={shipTemplate}
-                                                 key={`key-${i}`}
-                                                 setDraggedShip={setDraggedShip}/>)}
+                                                      key={`key-${i}`}
+                                                      setDraggedShip={setDraggedShip}/>)}
         </div>
     )
 }
@@ -152,7 +152,7 @@ export function ShipSelector({setDraggedShip}) {
                                                              templateName="allship3"
                                                              templates={templates}/>)}
 
-            {[allShip4.flat()].map((templates, i) => <ShipTemplateRow key={`allship4-${i}`}
+            {allShip4.map((templates, i) => <ShipTemplateRow key={`allship4-${i}`}
                                                              templates={templates}
                                                              templateName="allship4"
                                                              setDraggedShip={setDraggedShip}/>)}
