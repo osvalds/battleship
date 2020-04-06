@@ -54,13 +54,35 @@ const placeShipOnBoard = (ship, board) => {
 };
 
 const placedShipsToBoard = (placedShips) => {
-
     let board = new Array(10).fill().map(() => new Uint8Array(10));
 
     for (const ship of placedShips) {
         placeShipOnBoard(ship, board);
     }
+    return board;
+};
 
+const neighborDiff = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]];
+
+const isOverlapping = (x, y, template, placedShips) => {
+    const board = placedShipsToBoard(placedShips);
+    const {rows, cols} = getDimensions(template);
+
+    for (let i = 0; i < rows; i++) {
+        for (let j = 0; j < cols; j++) {
+            for (let [xd, yd] of neighborDiff) {
+                const ny = i + y + yd;
+                const nx = j + x + xd;
+                if (ny > -1 && ny < 10 &&
+                    nx > -1 && ny < 10 &&
+                    board[ny][nx] > 0) {
+                    return true;
+                }
+            }
+        }
+    }
+
+    return false;
 };
 
 const calculateOffset = (shipTemplate, x, y) => {
@@ -109,31 +131,27 @@ function App() {
         const isSnapping = hoveredCell.x > -1 && hoveredCell.y > -1;
         const x = hoveredCell.x - draggedShip.offset.x;
         const y = hoveredCell.y - draggedShip.offset.y;
-        // if (isSnapping) {
-        //     console.log(inBounds(x, y, draggedShip.template));
-        // }
 
         let newDragged = {
             ...draggedShip,
             x: x,
             y: y,
             inBounds: inBounds(x, y, draggedShip.template),
+            isOverlapping: isOverlapping(x, y, draggedShip.template, placedShips),
             isDragging: !isSnapping,
             isSnapping: isSnapping
         };
-        // console.log(newDragged);
+
         setDraggedShip(newDragged)
 
 
     }, [draggedShip, setDraggedShip, hoveredCell]);
 
     const handleOnMouseUp = useCallback(() => {
-        if (draggedShip?.isSnapping && draggedShip.inBounds === "green") {
+        if (draggedShip?.isSnapping && draggedShip.inBounds === "green" &&
+            !draggedShip.isOverlapping) {
             let newPlaced = [...placedShips];
-            var t0 = performance.now()
-            placedShipsToBoard(placedShips);
-            var t1 = performance.now()
-            console.log(t1-t0, "ms")
+
             // add board validation here
             setPlacedShips(newPlaced.concat([{...draggedShip}]));
             setDraggedShip(null);
