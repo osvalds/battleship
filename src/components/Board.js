@@ -2,6 +2,9 @@ import React, {useCallback, useEffect, useMemo, useRef, useState} from "react";
 import {getRandomColor} from "../core/util";
 import {Ship} from "./Ship";
 
+const cellSize = 10;
+const gap = 1;
+
 function BoardShip({x, y, template, cellSize = 10, gap = 1, handleMouseDown}) {
     return (
         <g onMouseDown={() => handleMouseDown(-1, -1)}>
@@ -10,7 +13,7 @@ function BoardShip({x, y, template, cellSize = 10, gap = 1, handleMouseDown}) {
                     return (
                         <rect
                             onMouseDown={e => {
-                                handleMouseDown(xs, ys)
+                                handleMouseDown(xs, ys);
                                 e.stopPropagation()
                             }}
                             // fill="#CF649A"
@@ -39,6 +42,87 @@ const getTransform = (template, x, y) => {
     return `translate(-${colStep / 2 + colStep * x}%, -${rowStep / 2 + rowStep * y}%)`
 };
 
+const LetterRow = ({letters, handleMouseEnter}) => {
+    return (
+        <g className="letter-row">
+            {letters.map((letter, index) => {
+                return (
+                    <g key={letter}>
+                        <rect stroke={getRandomColor()}
+                              fill="transparent"
+                              x={(index + 1) * cellSize + ((index + 1) * gap)}
+                              y="0"
+                              width={cellSize}
+                              height={cellSize}
+                              onMouseEnter={handleMouseEnter}
+                        />
+                        <text
+                            x={(index + 1) * cellSize + (index * gap)}
+                            y={cellSize}
+                            transform="translate(3,-2)"
+                            textLength={cellSize}
+                            fill="white"
+                            style={{fontSize: "9"}}
+                        >
+                            {letter}
+                        </text>
+                    </g>
+                )
+            })}
+
+        </g>)
+};
+
+const NumberRow = ({numbers, handleMouseEnter}) => {
+    return (
+        <g className="number-col">
+            {numbers.map((num, index) => {
+                return (
+                    <g key={num}>
+                        <rect stroke={getRandomColor()}
+                              fill="transparent"
+                              x="0"
+                              y={(index + 1) * cellSize + ((index + 1) * gap)}
+                              width={cellSize}
+                              height={cellSize}
+                              onMouseEnter={handleMouseEnter}
+                        />
+                        <text x="0"
+                              y={(index + 2) * cellSize + (index * gap)}
+                              textLength={cellSize}
+                              fill="white"
+                              transform="translate(0,-2)"
+                              onMouseEnter={handleMouseEnter}
+                              style={{fontSize: "9"}}>
+                            {num}
+                        </text>
+                    </g>
+                )
+            })}
+        </g>
+    )
+};
+
+const BlankPlaceholders = ({cols, rows, handleMouseEnter}) => {
+    return (
+        <g className="blank-placeholders">
+            {cols.map((letter, x) => {
+                return rows.map((num, y) => {
+                    return (<rect key={`${letter}:${num}`}
+                                  stroke={getRandomColor()}
+                                  fill="white"
+                                  x={(x + 1) * cellSize + ((x + 1) * gap)}
+                                  y={(y + 1) * cellSize + ((y + 1) * gap)}
+                                  width={cellSize}
+                                  height={cellSize}
+                                  onMouseEnter={() => handleMouseEnter({x, y})}
+                    />)
+                })
+            })}
+        </g>
+    )
+}
+
 export function Board({placedShips, draggingPosition, handleCellMouseEnter, hoveredCell, draggedShip, handlePlacedShipDragging}) {
     const boardCols = 11; // 10 cols + 1 for number
     const boardRows = 11; // 10 rows + 1 for letter
@@ -46,8 +130,6 @@ export function Board({placedShips, draggingPosition, handleCellMouseEnter, hove
     const colNames = [..."KARTUPELIS"];
     const rowNames = Array(10).fill().map((_, i) => i + 1);
 
-    const cellSize = 10;
-    const gap = 1;
 
     const containerWidth = cellSize * boardCols + boardCols;
     const containerHeight = cellSize * boardRows + boardRows;
@@ -59,7 +141,7 @@ export function Board({placedShips, draggingPosition, handleCellMouseEnter, hove
         const boardSVG = boardRef.current;
 
         setBoundingPosition(boardSVG.getBoundingClientRect());
-    }, [boardRef])
+    }, [boardRef]);
 
 
     const handleMouseMove = useCallback((e) => {
@@ -83,79 +165,21 @@ export function Board({placedShips, draggingPosition, handleCellMouseEnter, hove
                     <Ship ship={draggedShip.template}/>
                 </div>}
 
-
                 <svg viewBox={`0 0 ${containerWidth} ${containerHeight}`}
                      ref={boardRef}
                      onMouseMove={handleMouseMove}
                      onMouseLeave={() => handleCellMouseEnter({x: -1, y: -1})}
                      xmlns="http://www.w3.org/2000/svg">
-                    <g className="letter-row">
-                        {colNames.map((letter, index) => {
-                            return (
-                                <g key={letter}>
-                                    <rect stroke={getRandomColor()}
-                                          fill="transparent"
-                                          x={(index + 1) * cellSize + ((index + 1) * gap)}
-                                          y="0"
-                                          width={cellSize}
-                                          height={cellSize}
-                                          onMouseEnter={() => handleCellMouseEnter({x: -1, y: -1})}
-                                    />
-                                    <text
-                                        x={(index + 1) * cellSize + (index * gap)}
-                                        y={cellSize}
-                                        transform="translate(3,-2)"
-                                        textLength={cellSize}
-                                        fill="white"
-                                        style={{fontSize: "9"}}
-                                    >
-                                        {letter}
-                                    </text>
-                                </g>
-                            )
-                        })}
+                    <LetterRow letters={colNames}
+                               handleMouseEnter={() => handleCellMouseEnter({x: -1, y: -1})}/>
 
-                    </g>
-                    <g className="number-col">
-                        {rowNames.map((num, index) => {
-                            return (
-                                <g key={num}>
-                                    <rect stroke={getRandomColor()}
-                                          fill="transparent"
-                                          x="0"
-                                          y={(index + 1) * cellSize + ((index + 1) * gap)}
-                                          width={cellSize}
-                                          height={cellSize}
-                                          onMouseEnter={() => handleCellMouseEnter({x: -1, y: -1})}
-                                    />
-                                    <text x="0"
-                                          y={(index + 2) * cellSize + (index * gap)}
-                                          textLength={cellSize}
-                                          fill="white"
-                                          transform="translate(0,-2)"
-                                          onMouseEnter={() => handleCellMouseEnter({x: -1, y: -1})}
-                                          style={{fontSize: "9"}}>
-                                        {num}
-                                    </text>
-                                </g>
-                            )
-                        })}
-                    </g>
-                    <g className="blank-placeholders">
-                        {colNames.map((letter, x) => {
-                            return rowNames.map((num, y) => {
-                                return (<rect key={`${letter}:${num}`}
-                                              stroke={getRandomColor()}
-                                              fill="white"
-                                              x={(x + 1) * cellSize + ((x + 1) * gap)}
-                                              y={(y + 1) * cellSize + ((y + 1) * gap)}
-                                              width={cellSize}
-                                              height={cellSize}
-                                              onMouseEnter={() => handleCellMouseEnter({x: x, y: y})}
-                                />)
-                            })
-                        })}
-                    </g>
+                    <NumberRow numbers={rowNames}
+                               handleMouseEnter={() => handleCellMouseEnter({x: -1, y: -1})}/>
+
+                    <BlankPlaceholders cols={colNames}
+                                       rows={rowNames}
+                                       handleMouseEnter={handleCellMouseEnter}/>
+
                     <g style={draggedShip ? {pointerEvents: "none"} : {}}>
                         {
                             placedShips.map(ship => <BoardShip template={ship.template}
