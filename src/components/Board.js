@@ -4,14 +4,23 @@ import {Ship} from "./Ship";
 
 const cellSize = 10;
 const gap = 1;
+const boardCols = 11; // 10 cols + 1 for number
+const boardRows = 11; // 10 rows + 1 for letter
 
-function BoardShip({x, y, template, cellSize = 10, gap = 1, handleMouseDown}) {
+const colNames = [..."KARTUPELIS"];
+const rowNames = Array(10).fill().map((_, i) => i + 1);
+
+const containerWidth = cellSize * boardCols + boardCols;
+const containerHeight = cellSize * boardRows + boardRows;
+
+function BoardShip({x, y, template, cellSize = 10, gap = 1, handleMouseDown, uuid}) {
     return (
         <g onMouseDown={() => handleMouseDown(-1, -1)}>
             {template.map((row, ys) => row.map((cell, xs) => {
                 if (cell) {
                     return (
                         <rect
+                            key={`${uuid}-${ys}-${xs}`}
                             onMouseDown={e => {
                                 handleMouseDown(xs, ys);
                                 e.stopPropagation()
@@ -42,7 +51,7 @@ const getTransform = (template, x, y) => {
     return `translate(-${colStep / 2 + colStep * x}%, -${rowStep / 2 + rowStep * y}%)`
 };
 
-const LetterRow = ({letters, handleMouseEnter}) => {
+const LetterRow = React.memo(({letters, handleMouseEnter}) => {
     return (
         <g className="letter-row">
             {letters.map((letter, index) => {
@@ -71,9 +80,9 @@ const LetterRow = ({letters, handleMouseEnter}) => {
             })}
 
         </g>)
-};
+});
 
-const NumberRow = ({numbers, handleMouseEnter}) => {
+const NumberRow = React.memo(({numbers, handleMouseEnter}) => {
     return (
         <g className="number-col">
             {numbers.map((num, index) => {
@@ -101,7 +110,7 @@ const NumberRow = ({numbers, handleMouseEnter}) => {
             })}
         </g>
     )
-};
+});
 
 const BlankPlaceholders = ({cols, rows, handleMouseEnter}) => {
     return (
@@ -124,15 +133,6 @@ const BlankPlaceholders = ({cols, rows, handleMouseEnter}) => {
 }
 
 export function Board({placedShips, draggingPosition, handleCellMouseEnter, hoveredCell, draggedShip, handlePlacedShipDragging}) {
-    const boardCols = 11; // 10 cols + 1 for number
-    const boardRows = 11; // 10 rows + 1 for letter
-
-    const colNames = [..."KARTUPELIS"];
-    const rowNames = Array(10).fill().map((_, i) => i + 1);
-
-
-    const containerWidth = cellSize * boardCols + boardCols;
-    const containerHeight = cellSize * boardRows + boardRows;
 
     const boardRef = useRef(null);
     const [boundingPosition, setBoundingPosition] = useState(0);
@@ -143,17 +143,9 @@ export function Board({placedShips, draggingPosition, handleCellMouseEnter, hove
         setBoundingPosition(boardSVG.getBoundingClientRect());
     }, [boardRef]);
 
-
-    const handleMouseMove = useCallback((e) => {
-    }, []);
-
     return (
         <div>
-            <div className="board"
-                 onMouseEnter={e => console.log("board mouse enter")}
-                 onMouseUp={e => console.log("board drop")}
-                 onMouseMove={e => console.log("board mouse move")}>
-
+            <div className="board">
                 {draggedShip && draggedShip.isDragging &&
                 <div style={{
                     position: "fixed",
@@ -167,7 +159,6 @@ export function Board({placedShips, draggingPosition, handleCellMouseEnter, hove
 
                 <svg viewBox={`0 0 ${containerWidth} ${containerHeight}`}
                      ref={boardRef}
-                     onMouseMove={handleMouseMove}
                      onMouseLeave={() => handleCellMouseEnter({x: -1, y: -1})}
                      xmlns="http://www.w3.org/2000/svg">
                     <LetterRow letters={colNames}
@@ -183,6 +174,8 @@ export function Board({placedShips, draggingPosition, handleCellMouseEnter, hove
                     <g style={draggedShip ? {pointerEvents: "none"} : {}}>
                         {
                             placedShips.map(ship => <BoardShip template={ship.template}
+                                                               uuid={ship.uuid}
+                                                               key={ship.uuid}
                                                                handleMouseDown={(x, y) => handlePlacedShipDragging(ship, x, y)}
                                                                x={ship.x}
                                                                y={ship.y}/>)
@@ -195,6 +188,7 @@ export function Board({placedShips, draggingPosition, handleCellMouseEnter, hove
                         fill: draggedShip.inBounds
                     }}>
                         <BoardShip template={draggedShip.template}
+                                   uuid={draggedShip.uuid}
                                    x={draggedShip.x}
                                    y={draggedShip.y}/>
                     </g>}

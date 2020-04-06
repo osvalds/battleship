@@ -1,13 +1,12 @@
 import React, {useCallback, useState} from "react";
-import {getRandomColor} from "../core/util";
+import {getRandomColor, uuidv4} from "../core/util";
 
-function ShipContent({ship, setDraggedShip, cellSize = 10, gap = 1}) {
+const ShipContent = React.memo(({ship, setDraggedShip, cellSize = 10, gap = 1}) => {
     const rows = ship.length;
     const cols = ship[0].length;
 
     const containerWidth = cellSize * cols + cols - 1;
     const containerHeight = cellSize * rows + rows - 1;
-
 
     const handleGrabbingShip = useCallback((x, y) => {
         setDraggedShip(ship, x, y)
@@ -24,6 +23,7 @@ function ShipContent({ship, setDraggedShip, cellSize = 10, gap = 1}) {
                     if (cell) {
                         return (
                             <rect
+                                key={`${x}:${y}`}
                                 fill="#CF649A"
                                 stroke={getRandomColor()}
                                 x={(x) * cellSize + ((x) * gap)}
@@ -43,13 +43,13 @@ function ShipContent({ship, setDraggedShip, cellSize = 10, gap = 1}) {
             </svg>
         </div>
     )
-}
+});
 
-export function Ship({ship, setDraggedShip}) {
+export const Ship = React.memo(({ship, setDraggedShip}) => {
     if (ship === null) {
         return null;
     } else {
         return <ShipContent ship={ship} setDraggedShip={setDraggedShip}/>
     }
 
-}
+})
