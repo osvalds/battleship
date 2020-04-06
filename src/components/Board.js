@@ -42,7 +42,6 @@ function BoardShip({x, y, template, cellSize = 10, gap = 1, handleMouseDown, uui
 }
 
 const getStrokeColor = (draggedShip) => {
-    console.log(draggedShip);
     if (!draggedShip.inBounds) {
         return "#ffd868";
     } else if (draggedShip.isOverlapping) {

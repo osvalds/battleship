@@ -2,19 +2,7 @@ import React, {useCallback, useState} from 'react';
 import './App.scss';
 import {Board} from "./components/Board";
 import {ShipSelector} from "./components/ShipSelector";
-import {Ship} from "./components/Ship";
 import {getDimensions, uuidv4} from "./core/util";
-
-const placed = [
-    // {
-    //     x: 2,
-    //     y: 4,
-    //     template: [
-    //         [1, 1, 1],
-    //         [1, 0, 0]
-    //     ]
-    // }
-];
 
 const centerOffset = (template) => {
     const rows = template.length;
@@ -99,12 +87,6 @@ function App() {
         setHoveredCell({x, y});
     }, [setHoveredCell]);
 
-    const handleAddingDraggedShip = useCallback((shipTemplate) => {
-        // const placedNew = [...placedShips];
-
-
-    }, [setPlacedShips, placedShips, setDraggedShip]);
-
     const handleDraggedShip = useCallback((shipTemplate, x, y) => {
 
         const shipUUID = uuidv4();
@@ -140,8 +122,7 @@ function App() {
 
         setDraggedShip(newDragged)
 
-
-    }, [draggedShip, setDraggedShip, hoveredCell]);
+    }, [draggedShip, setDraggedShip, hoveredCell, placedShips]);
 
     const handleOnMouseUp = useCallback(() => {
         if (draggedShip?.isSnapping &&
@@ -176,7 +157,7 @@ function App() {
 
         setDraggedShip(ship);
         setPlacedShips(newPlaced);
-    }, [draggedShip, placedShips]);
+    }, [placedShips]);
 
     return (
         <div className="App"
@@ -186,11 +167,7 @@ function App() {
              onMouseMove={(e) => {
                  if (draggedShip !== null && (e.buttons === 1 || e.buttons === 3)) {
                      setDraggingPosition({x: e.clientX, y: e.clientY})
-
-                     // if (hoveredCell.x > -1 && hoveredCell.y > -1) {
                      handleDraggedShipSnapping()
-                     // console.log("entered board")
-                     // }
                  }
              }}
              onMouseUp={handleOnMouseUp}
