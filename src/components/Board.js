@@ -44,9 +44,9 @@ function BoardShip({x, y, template, cellSize = 10, gap = 1, handleMouseDown, uui
 const getStrokeColor = (draggedShip) => {
     console.log(draggedShip);
     if (!draggedShip.inBounds) {
-        return "yellow";
+        return "#ffd868";
     } else if (draggedShip.isOverlapping) {
-        return "red"
+        return "#b80d57"
     }
     return "white";
 };
@@ -181,11 +181,9 @@ export function Board({placedShips, draggingPosition, handleCellMouseEnter, hove
 
                     <g style={draggedShip ? {
                         pointerEvents: "none",
-                        fill: "transparent",
-                        stroke: "white"
+                        fill: "white",
                     } : {
-                        fill: "transparent",
-                        stroke: "white"
+                        fill: "white",
                     }}>
                         {
                             placedShips.map(ship => <BoardShip template={ship.template}
@@ -200,8 +198,7 @@ export function Board({placedShips, draggingPosition, handleCellMouseEnter, hove
                     {draggedShip && draggedShip.isSnapping &&
                     <g style={{
                         pointerEvents: "none",
-                        fill: "transparent",
-                        stroke: getStrokeColor(draggedShip)
+                        fill: getStrokeColor(draggedShip),
                     }}>
                         <BoardShip template={draggedShip.template}
                                    uuid={draggedShip.uuid}

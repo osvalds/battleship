@@ -24,7 +24,7 @@ const ShipContent = React.memo(({ship, setDraggedShip, cellSize = 10, gap = 1}) 
                         return (
                             <rect
                                 key={`${x}:${y}`}
-                                fill="#CF649A"
+                                fill="white"
                                 stroke={getRandomColor()}
                                 x={(x) * cellSize + ((x) * gap)}
                                 y={(y) * cellSize + ((y) * gap)}
