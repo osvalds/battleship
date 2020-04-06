@@ -3,7 +3,7 @@ import './App.scss';
 import {Board} from "./components/Board";
 import {ShipSelector} from "./components/ShipSelector";
 import {Ship} from "./components/Ship";
-import {uuidv4} from "./core/util";
+import {getDimensions, uuidv4} from "./core/util";
 
 const placed = [
     // {
@@ -41,9 +41,27 @@ const inBounds = (x, y, template) => {
     }
 };
 
-const placedShipsToBoard = () => {
+const placeShipOnBoard = (ship, board) => {
+    const {x, y, template} = ship;
+    const {rows, cols} = getDimensions(template)
 
-}
+    for (let i = 0; i < rows; i++) {
+        for (let j = 0; j < cols; j++) {
+            board[y + i][x + j] += template[i][j];
+        }
+    }
+
+};
+
+const placedShipsToBoard = (placedShips) => {
+
+    let board = new Array(10).fill().map(() => new Uint8Array(10));
+
+    for (const ship of placedShips) {
+        placeShipOnBoard(ship, board);
+    }
+
+};
 
 const calculateOffset = (shipTemplate, x, y) => {
     if (x === -1 && y === -1) {
@@ -110,18 +128,21 @@ function App() {
     }, [draggedShip, setDraggedShip, hoveredCell]);
 
     const handleOnMouseUp = useCallback(() => {
-
-        if (draggedShip !== null && draggedShip.isSnapping && draggedShip.inBounds === "green") {
+        if (draggedShip?.isSnapping && draggedShip.inBounds === "green") {
             let newPlaced = [...placedShips];
+            var t0 = performance.now()
+            placedShipsToBoard(placedShips);
+            var t1 = performance.now()
+            console.log(t1-t0, "ms")
             // add board validation here
             setPlacedShips(newPlaced.concat([{...draggedShip}]));
             setDraggedShip(null);
             setDraggingPosition({x: -1000, y: -1000})
         } else {
-            setDraggingPosition({x: -1000, y: -1000})
+            setDraggingPosition({x: -1000, y: -1000});
             setDraggedShip(null);
         }
-    }, [draggedShip, placedShips, setDraggedShip, setPlacedShips, setDraggingPosition])
+    }, [draggedShip, placedShips, setDraggedShip, setPlacedShips, setDraggingPosition]);
 
     const handleDraggingOnPlacedShip = useCallback((ship, x, y) => {
         let newPlaced = placedShips.filter(sh => sh.uuid !== ship.uuid);

@@ -156,12 +156,15 @@ export function Board({placedShips, draggingPosition, handleCellMouseEnter, hove
                             })
                         })}
                     </g>
-                    {
-                        placedShips.map(ship => <BoardShip template={ship.template}
-                                                           handleMouseDown={(x, y) => handlePlacedShipDragging(ship, x, y)}
-                                                           x={ship.x}
-                                                           y={ship.y}/>)
-                    }
+                    <g style={draggedShip ? {pointerEvents: "none"} : {}}>
+                        {
+                            placedShips.map(ship => <BoardShip template={ship.template}
+                                                               handleMouseDown={(x, y) => handlePlacedShipDragging(ship, x, y)}
+                                                               x={ship.x}
+                                                               y={ship.y}/>)
+                        }
+                    </g>
+
                     {draggedShip && draggedShip.isSnapping &&
                     <g style={{
                         pointerEvents: "none",
