@@ -56,7 +56,9 @@ body {
   overscroll-behavior-y: none;
   font-family: monospace;
 }
-
+:root {
+  --body-background: #222831;
+}
 html, body, #root, .App {
   height: 100%;
   background-color: #222831;

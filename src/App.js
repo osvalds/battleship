@@ -31,14 +31,10 @@ const inBounds = (x, y, template) => {
     const cols = template[0].length;
 
     if (x < 0 || y < 0) {
-        return "red";
+        return false;
     }
 
-    if (rows + y < 11 && cols + x < 11) {
-        return "green";
-    } else {
-        return "red";
-    }
+    return rows + y < 11 && cols + x < 11;
 };
 
 const placeShipOnBoard = (ship, board) => {
@@ -148,7 +144,7 @@ function App() {
     }, [draggedShip, setDraggedShip, hoveredCell]);
 
     const handleOnMouseUp = useCallback(() => {
-        if (draggedShip?.isSnapping && draggedShip.inBounds === "green" &&
+        if (draggedShip?.isSnapping && draggedShip.inBounds &&
             !draggedShip.isOverlapping) {
             let newPlaced = [...placedShips];
 

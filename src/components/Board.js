@@ -25,7 +25,7 @@ function BoardShip({x, y, template, cellSize = 10, gap = 1, handleMouseDown, uui
                                 handleMouseDown(xs, ys);
                                 e.stopPropagation()
                             }}
-                            // fill="#CF649A"
+                            strokeWidth="2"
                             x={(x + xs + 1) * cellSize + ((x + xs + 1) * gap)}
                             y={(y + ys + 1) * cellSize + ((y + ys + 1) * gap)}
                             width={cellSize}
@@ -40,6 +40,16 @@ function BoardShip({x, y, template, cellSize = 10, gap = 1, handleMouseDown, uui
         </g>
     )
 }
+
+const getStrokeColor = (draggedShip) => {
+    console.log(draggedShip);
+    if (!draggedShip.inBounds) {
+        return "yellow";
+    } else if (draggedShip.isOverlapping) {
+        return "red"
+    }
+    return "white";
+};
 
 const getTransform = (template, x, y) => {
     const rows = template.length;
@@ -57,8 +67,9 @@ const LetterRow = React.memo(({letters, handleMouseEnter}) => {
             {letters.map((letter, index) => {
                 return (
                     <g key={letter}>
-                        <rect stroke={getRandomColor()}
-                              fill="transparent"
+                        <rect stroke="var(--body-background)"
+                              strokeWidth="2"
+                              fill="var(--body-background)"
                               x={(index + 1) * cellSize + ((index + 1) * gap)}
                               y="0"
                               width={cellSize}
@@ -88,8 +99,9 @@ const NumberRow = React.memo(({numbers, handleMouseEnter}) => {
             {numbers.map((num, index) => {
                 return (
                     <g key={num}>
-                        <rect stroke={getRandomColor()}
-                              fill="transparent"
+                        <rect stroke="var(--body-background)"
+                              strokeWidth="2"
+                              fill="var(--body-background)"
                               x="0"
                               y={(index + 1) * cellSize + ((index + 1) * gap)}
                               width={cellSize}
@@ -119,7 +131,7 @@ const BlankPlaceholders = ({cols, rows, handleMouseEnter}) => {
                 return rows.map((num, y) => {
                     return (<rect key={`${letter}:${num}`}
                                   stroke={getRandomColor()}
-                                  fill="white"
+                                  fill="#109DAC"
                                   x={(x + 1) * cellSize + ((x + 1) * gap)}
                                   y={(y + 1) * cellSize + ((y + 1) * gap)}
                                   width={cellSize}
@@ -161,17 +173,20 @@ export function Board({placedShips, draggingPosition, handleCellMouseEnter, hove
                      ref={boardRef}
                      onMouseLeave={() => handleCellMouseEnter({x: -1, y: -1})}
                      xmlns="http://www.w3.org/2000/svg">
-                    <LetterRow letters={colNames}
-                               handleMouseEnter={() => handleCellMouseEnter({x: -1, y: -1})}/>
 
-                    <NumberRow numbers={rowNames}
-                               handleMouseEnter={() => handleCellMouseEnter({x: -1, y: -1})}/>
 
                     <BlankPlaceholders cols={colNames}
                                        rows={rowNames}
                                        handleMouseEnter={handleCellMouseEnter}/>
 
-                    <g style={draggedShip ? {pointerEvents: "none"} : {}}>
+                    <g style={draggedShip ? {
+                        pointerEvents: "none",
+                        fill: "transparent",
+                        stroke: "white"
+                    } : {
+                        fill: "transparent",
+                        stroke: "white"
+                    }}>
                         {
                             placedShips.map(ship => <BoardShip template={ship.template}
                                                                uuid={ship.uuid}
@@ -185,14 +200,19 @@ export function Board({placedShips, draggingPosition, handleCellMouseEnter, hove
                     {draggedShip && draggedShip.isSnapping &&
                     <g style={{
                         pointerEvents: "none",
-                        fill: draggedShip.inBounds
+                        fill: "transparent",
+                        stroke: getStrokeColor(draggedShip)
                     }}>
                         <BoardShip template={draggedShip.template}
                                    uuid={draggedShip.uuid}
                                    x={draggedShip.x}
                                    y={draggedShip.y}/>
                     </g>}
+                    <LetterRow letters={colNames}
+                               handleMouseEnter={() => handleCellMouseEnter({x: -1, y: -1})}/>
 
+                    <NumberRow numbers={rowNames}
+                               handleMouseEnter={() => handleCellMouseEnter({x: -1, y: -1})}/>
                 </svg>
             </div>
             <div className="debug">
