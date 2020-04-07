@@ -1,4 +1,4 @@
-import React, {Fragment} from "react";
+import React, {Fragment, useState} from "react";
 import {BlankBoard, cellSize, gap} from "./Board";
 import {getRandomColor} from "../core/util";
 import {placedShipsToBoard} from "./SetupBoard";
@@ -36,16 +36,21 @@ function PlacedShots({placedShots, shotSource}) {
 
 export function EnemyBoard({usePlacedShots, useEnemyShips, title}) {
     const [placedShots, setPlacedShots] = usePlacedShots;
+    const [placedComputerShots, setPlacedComputerShots] = useState([]);
+
     const [enemyShips, setEnemyShips] = useEnemyShips;
+
 
     const onCellClick = ({x, y}) => {
         let newPlaced = [...placedShots];
-        const board = placedShipsToBoard(enemyShips)
+        const board = placedShipsToBoard(enemyShips);
 
-        if (!board[y][x]) {
+        // hit on a board
+        if (board[y][x]) {
+
+        } else {
             setPlacedShots(newPlaced.concat([[x, y]]));
         }
-
     };
 
     console.log("placed shots", placedShots);
@@ -56,6 +61,8 @@ export function EnemyBoard({usePlacedShots, useEnemyShips, title}) {
                         onCellClick={onCellClick}>
                 <PlacedShots placedShots={placedShots}
                              shotSource="player"/>
+                <PlacedShots placedShots={placedComputerShots}
+                             shotSource="computer"/>
             </BlankBoard>
             <h2 className="u-h2">
                 {title}

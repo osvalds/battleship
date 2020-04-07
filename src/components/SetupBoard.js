@@ -128,7 +128,6 @@ export const getRandomShipPlacement = () => {
                 x: cx,
                 y: cy,
                 template: chosenTemplates[i],
-                offset: {x: 0, y: 0},
                 inBounds: true,
                 isOverlapping: false,
                 isDragging: false,
