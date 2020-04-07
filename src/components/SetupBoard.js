@@ -34,19 +34,19 @@ const inBounds = (x, y, template) => {
 };
 
 const placeShipOnBoard = (ship, board) => {
-    const {x, y, template} = ship;
+    const {x, y, template, uuid} = ship;
     const {rows, cols} = getDimensions(template);
 
     for (let i = 0; i < rows; i++) {
         for (let j = 0; j < cols; j++) {
-            board[y + i][x + j] += template[i][j];
+            board[y + i][x + j] = template[i][j] ? uuid : "";
         }
     }
 
 };
 
 export const placedShipsToBoard = (placedShips) => {
-    let board = new Array(10).fill().map(() => new Uint8Array(10));
+    let board = new Array(10).fill().map(() => new Array(10).fill(""));
 
     for (const ship of placedShips) {
         placeShipOnBoard(ship, board);
@@ -67,7 +67,7 @@ const isOverlapping = (x, y, template, placedShips, board = placedShipsToBoard(p
                     const nx = j + x + xd;
                     if (ny > -1 && ny < 10 &&
                         nx > -1 && ny < 10 &&
-                        board[ny][nx] > 0) {
+                        board[ny][nx] !== "") {
                         return true;
                     }
                 }
@@ -101,7 +101,7 @@ const getAllValidPositions = (board, template) => {
 };
 
 export const getRandomShipPlacement = () => {
-    let board = new Array(10).fill().map(() => new Uint8Array(10))
+    let board = new Array(10).fill().map(() => new Array(10).fill(""))
 
     const allShip1 = allShipPermutationsFlat(shipSize1);
     const allShip2 = allShipPermutationsFlat(shipSize2);
@@ -272,9 +272,9 @@ export function SetupBoard({usePlacedShips, title}) {
                    draggedShip={draggedShip}
                    hoveredCell={hoveredCell}
                    draggingPosition={draggingPosition}/>
-           <h2 className="u-h2">
-               {title}
-           </h2>
+            <h2 className="u-h2">
+                {title}
+            </h2>
             <button
                 className="button"
                 onClick={fillBoardWithRandom}>Random layout

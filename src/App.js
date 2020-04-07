@@ -30,7 +30,7 @@ function App() {
                     usePlacedShips={[computerPlacedShips, setComputerPlacedShips]}/>
                 <EnemyBoard
                     title="🧗‍ board (enemy)"
-                    useEnemyShips={[playerPlacedShips, playerPlacedShips]}
+                    useEnemyShips={[playerPlacedShips, setPlayerPlacedShips]}
                     usePlacedShots={[computerPlacedShots, setComputerPlacedShots]}/>
             </div>
         </div>

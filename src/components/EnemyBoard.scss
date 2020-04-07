@@ -4,9 +4,25 @@
     .placed-shots__shot {
       fill: black;
     }
+  }
 
-    .placed-shots__computer {
+  &--computer {
+    .placed-shots__shot {
       fill: gray;
+    }
+  }
+}
+
+.bombed-ship {
+
+  &__cell {
+    fill: transparent;
+  }
+
+  &--true {
+    .bombed-ship__cell {
+      stroke-width: 1;
+      stroke: var(--button-primary-bgcolor);
     }
   }
 }
