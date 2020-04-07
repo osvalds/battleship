@@ -204,24 +204,32 @@ function App() {
 
         for (let i = 9; i >= 0; i--) {
             const validPositions = getAllValidPositions(board, chosenTemplates[i]);
-            const [cx, cy] = validPositions[getRandomInt(0, validPositions.length - 1)];
-            placedShips.push({
-                uuid: uuidv4(),
-                x: cx,
-                y: cy,
-                template: chosenTemplates[i],
-                offset: {x: 0, y: 0},
-                inBounds: true,
-                isOverlapping: false,
-                isDragging: false,
-                isSnapping: true
-            });
+            if (validPositions.length > 0) {
+                const [cx, cy] = validPositions[getRandomInt(0, validPositions.length - 1)];
+                placedShips.push({
+                    uuid: uuidv4(),
+                    x: cx,
+                    y: cy,
+                    template: chosenTemplates[i],
+                    offset: {x: 0, y: 0},
+                    inBounds: true,
+                    isOverlapping: false,
+                    isDragging: false,
+                    isSnapping: true
+                });
 
-            placeShipOnBoard({
-                x: cx,
-                y: cy,
-                template: chosenTemplates[i]
-            }, board);
+                placeShipOnBoard({
+                    x: cx,
+                    y: cy,
+                    template: chosenTemplates[i]
+                }, board);
+            } else {
+                // in case there are no available places where to put stuff,
+                // just call the function again. I tried this fn ~50k times,
+                // and it was never called again so this is just a precaution
+                fillBoardWithRandom();
+            }
+
         }
 
         setPlacedShips(placedShips);
