@@ -87,7 +87,7 @@ const calculateOffset = (shipTemplate, x, y) => {
     }
 };
 
-function App() {
+function ConfigBoard() {
     const [placedShips, setPlacedShips] = useState([]);
     const [draggedShip, setDraggedShip] = useState(null);
     const [draggingPosition, setDraggingPosition] = useState({x: 0, y: 0});
@@ -253,8 +253,7 @@ function App() {
 
 
     return (
-        <div className="App"
-             onMouseDown={e => {
+        <div onMouseDown={e => {
                  setDraggingPosition({x: e.clientX, y: e.clientY})
              }}
              onMouseMove={(e) => {
@@ -275,6 +274,16 @@ function App() {
             <ShipSelector setDraggedShip={handleDraggedShip}/>
         </div>
     );
+}
+
+function App() {
+    return (
+        <div className="App">
+            <ConfigBoard/>
+        </div>
+
+    )
+
 }
 
 export default App;

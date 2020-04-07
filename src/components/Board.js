@@ -143,17 +143,7 @@ const BlankPlaceholders = ({cols, rows, handleMouseEnter}) => {
     )
 }
 
-export function Board({placedShips, draggingPosition, handleCellMouseEnter, hoveredCell, draggedShip, handlePlacedShipDragging}) {
-
-    const boardRef = useRef(null);
-    const [boundingPosition, setBoundingPosition] = useState(0);
-
-    useEffect(() => {
-        const boardSVG = boardRef.current;
-
-        setBoundingPosition(boardSVG.getBoundingClientRect());
-    }, [boardRef]);
-
+export function Board({placedShips, draggingPosition, handleCellMouseEnter, draggedShip, handlePlacedShipDragging}) {
     return (
         <div>
             <div className="board">
@@ -169,7 +159,6 @@ export function Board({placedShips, draggingPosition, handleCellMouseEnter, hove
                 </div>}
 
                 <svg viewBox={`0 0 ${containerWidth} ${containerHeight}`}
-                     ref={boardRef}
                      onMouseLeave={() => handleCellMouseEnter({x: -1, y: -1})}
                      xmlns="http://www.w3.org/2000/svg">
 
@@ -210,12 +199,6 @@ export function Board({placedShips, draggingPosition, handleCellMouseEnter, hove
                     <NumberRow numbers={rowNames}
                                handleMouseEnter={() => handleCellMouseEnter({x: -1, y: -1})}/>
                 </svg>
-            </div>
-            <div className="debug">
-                Board width: {JSON.stringify(boundingPosition)}
-            </div>
-            <div className="debug">
-                Hover position: {JSON.stringify(hoveredCell)}
             </div>
         </div>
     )
