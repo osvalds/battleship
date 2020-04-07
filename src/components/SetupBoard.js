@@ -152,7 +152,7 @@ export const getRandomShipPlacement = () => {
     return placedShips;
 };
 
-export function SetupBoard({usePlacedShips}) {
+export function SetupBoard({usePlacedShips, title}) {
     const [placedShips, setPlacedShips] = usePlacedShips;
     const [draggedShip, setDraggedShip] = useState(null);
     const [draggingPosition, setDraggingPosition] = useState({x: 0, y: 0});
@@ -273,11 +273,14 @@ export function SetupBoard({usePlacedShips}) {
                    draggedShip={draggedShip}
                    hoveredCell={hoveredCell}
                    draggingPosition={draggingPosition}/>
+           <h2 className="u-h2">
+               {title}
+           </h2>
             <button
                 className="button"
                 onClick={fillBoardWithRandom}>Random layout
             </button>
-            <ShipSelector setDraggedShip={handleDraggedShip}/>
+            {/*<ShipSelector setDraggedShip={handleDraggedShip}/>*/}
         </div>
     );
 }

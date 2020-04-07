@@ -202,5 +202,25 @@ export function Board({placedShips, draggingPosition, handleCellMouseEnter, drag
             </div>
         </div>
     )
+}
 
+export function BlankBoard({handleCellMouseEnter}) {
+    return (
+        <div className="board">
+            <svg viewBox={`0 0 ${containerWidth} ${containerHeight}`}
+                 onMouseLeave={() => handleCellMouseEnter({x: -1, y: -1})}
+                 xmlns="http://www.w3.org/2000/svg">
+
+                <BlankPlaceholders cols={colNames}
+                                   rows={rowNames}
+                                   handleMouseEnter={handleCellMouseEnter}/>
+
+                <LetterRow letters={colNames}
+                           handleMouseEnter={() => handleCellMouseEnter({x: -1, y: -1})}/>
+
+                <NumberRow numbers={rowNames}
+                           handleMouseEnter={() => handleCellMouseEnter({x: -1, y: -1})}/>
+            </svg>
+        </div>
+    )
 }

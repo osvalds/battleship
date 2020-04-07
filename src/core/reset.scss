@@ -55,13 +55,14 @@ table {
 body {
   overscroll-behavior-y: none;
   font-family: monospace;
+  color: white;
 }
 :root {
   --body-background: #222831;
 }
 html, body, #root, .App {
   height: 100%;
-  background-color: #222831;
+  background-color: var(--body-background);
   overflow: hidden;
 }
 
@@ -69,4 +70,17 @@ html, body, #root, .App {
   overflow: hidden;
   display: flex;
   flex-direction: column;
+
+  &__row {
+    margin: 24px 24px;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+}
+
+.u-h2 {
+  font-size: 20px;
+  margin: 16px 0;
 }
