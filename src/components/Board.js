@@ -2,8 +2,8 @@ import React, {useCallback, useEffect, useMemo, useRef, useState} from "react";
 import {getRandomColor} from "../core/util";
 import {Ship} from "./Ship";
 
-const cellSize = 10;
-const gap = 1;
+export const cellSize = 10;
+export const gap = 1;
 const boardCols = 11; // 10 cols + 1 for number
 const boardRows = 11; // 10 rows + 1 for letter
 
@@ -123,18 +123,20 @@ const NumberRow = React.memo(({numbers, handleMouseEnter}) => {
     )
 });
 
-const BlankPlaceholders = ({cols, rows, handleMouseEnter}) => {
+const BlankPlaceholders = ({cols, rows, handleMouseEnter, className, handleClick = () => null}) => {
     return (
         <g className="blank-placeholders">
             {cols.map((letter, x) => {
                 return rows.map((num, y) => {
                     return (<rect key={`${letter}:${num}`}
+                                  className={className}
                                   stroke={getRandomColor()}
                                   fill="#109DAC"
                                   x={(x + 1) * cellSize + ((x + 1) * gap)}
                                   y={(y + 1) * cellSize + ((y + 1) * gap)}
                                   width={cellSize}
                                   height={cellSize}
+                                  onClick={() => handleClick({x, y})}
                                   onMouseEnter={() => handleMouseEnter({x, y})}
                     />)
                 })
@@ -204,7 +206,11 @@ export function Board({placedShips, draggingPosition, handleCellMouseEnter, drag
     )
 }
 
-export function BlankBoard({handleCellMouseEnter}) {
+export function BlankBoard({
+                               onCellClick,
+                               handleCellMouseEnter,
+                               children
+                           }) {
     return (
         <div className="board">
             <svg viewBox={`0 0 ${containerWidth} ${containerHeight}`}
@@ -213,6 +219,8 @@ export function BlankBoard({handleCellMouseEnter}) {
 
                 <BlankPlaceholders cols={colNames}
                                    rows={rowNames}
+                                   className="board-hover"
+                                   handleClick={onCellClick}
                                    handleMouseEnter={handleCellMouseEnter}/>
 
                 <LetterRow letters={colNames}
@@ -220,6 +228,7 @@ export function BlankBoard({handleCellMouseEnter}) {
 
                 <NumberRow numbers={rowNames}
                            handleMouseEnter={() => handleCellMouseEnter({x: -1, y: -1})}/>
+                {children}
             </svg>
         </div>
     )

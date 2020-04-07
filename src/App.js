@@ -21,6 +21,7 @@ function App() {
                     usePlacedShips={[playerPlacedShips, setPlayerPlacedShips]}/>
                 <EnemyBoard
                     title="🤖's board (enemy)"
+                    useEnemyShips={[computerPlacedShips, setComputerPlacedShips]}
                     usePlacedShots={[playerPlacedShots, setPlayerPlacedShots]}/>
             </div>
             <div className="App__row">
@@ -29,6 +30,7 @@ function App() {
                     usePlacedShips={[computerPlacedShips, setComputerPlacedShips]}/>
                 <EnemyBoard
                     title="🧗‍ board (enemy)"
+                    useEnemyShips={[playerPlacedShips, playerPlacedShips]}
                     usePlacedShots={[computerPlacedShots, setComputerPlacedShots]}/>
             </div>
         </div>

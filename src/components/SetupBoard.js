@@ -45,7 +45,7 @@ const placeShipOnBoard = (ship, board) => {
 
 };
 
-const placedShipsToBoard = (placedShips) => {
+export const placedShipsToBoard = (placedShips) => {
     let board = new Array(10).fill().map(() => new Uint8Array(10));
 
     for (const ship of placedShips) {

@@ -1,0 +1,12 @@
+.placed-shots {
+
+  &--player {
+    .placed-shots__shot {
+      fill: black;
+    }
+
+    .placed-shots__computer {
+      fill: gray;
+    }
+  }
+}
