@@ -4,6 +4,10 @@ import {getDimensions, getRandomColor} from "../core/util";
 import {placedShipsToBoard} from "./SetupBoard";
 import hull from "hull.js"
 
+function svgCoord(c, ct) {
+    return (c + ct + 1) * cellSize + ((c + ct + 1) * gap)
+}
+
 function PlacedShots({placedShots, shotSource}) {
     if (placedShots) {
         return (
@@ -14,15 +18,15 @@ function PlacedShots({placedShots, shotSource}) {
                             <rect className="placed-shots__mask"
                                   stroke="transparent"
                                   fill="transparent"
-                                  x={(x + 1) * cellSize + ((x + 1) * gap)}
-                                  y={(y + 1) * cellSize + ((y + 1) * gap)}
+                                  x={svgCoord(x, 0)}
+                                  y={svgCoord(y, 0)}
                                   width={cellSize}
                                   height={cellSize}
                             />
                             <circle
                                 className="placed-shots__shot"
-                                cx={(x + 1) * cellSize + ((x + 1) * gap) + cellSize / 2}
-                                cy={(y + 1) * cellSize + ((y + 1) * gap) + cellSize / 2}
+                                cx={svgCoord(x, 0) + cellSize / 2}
+                                cy={svgCoord(y, 0) + cellSize / 2}
                                 r="1.75"/>
                         </g>
                     )
@@ -59,8 +63,8 @@ const isSunken = ({template, hits}) => {
 
 function ShipHits({hits}) {
     return hits.map(([x, y]) => {
-        let sx = (x + 1) * cellSize + ((x + 1) * gap);
-        let sy = (y + 1) * cellSize + ((y + 1) * gap);
+        let sx = svgCoord(x, 0);
+        let sy = svgCoord(y, 0);
         return (
             <g className="bombed-cell__wrapper"
                key={`${x}-${y}`}>
@@ -71,19 +75,15 @@ function ShipHits({hits}) {
                       height={cellSize}
                 />
                 <path
-                    d={`M ${sx} ${sy} 
-                        L ${sx + cellSize} ${sy + cellSize}
-                        M ${sx} ${sy + cellSize}
-                        L ${sx + cellSize} ${sy}`}
+                    d={`M ${sx + 0.5} ${sy + 0.5} 
+                        L ${sx + cellSize - .5} ${sy + cellSize - .5}
+                        M ${sx + 0.5} ${sy + cellSize - .5}
+                        L ${sx + cellSize - .5} ${sy + 0.5}`}
                     strokeWidth="1"
                     stroke="var(--button-primary-bgcolor)"/>
             </g>
         )
     })
-}
-
-function baseCoord(c, ct) {
-    return (c + ct + 1) * cellSize + ((c + ct + 1) * gap)
 }
 
 function HullToD(hull) {
@@ -104,11 +104,11 @@ function ShipHull({ship}) {
     for (let yt = 0; yt < rows; yt++) {
         for (let xt = 0; xt < cols; xt++) {
             if (template[yt][xt]) {
-                const x0 = baseCoord(x, xt) + 0.5;
-                const y0 = baseCoord(y, yt) + 0.5;
+                const x0 = svgCoord(x, xt) + 0.5;
+                const y0 = svgCoord(y, yt) + 0.5;
 
-                const x1 = x0 + cellSize - 1;
-                const y1 = y0 + cellSize - 1;
+                const x1 = x0 + cellSize - .5;
+                const y1 = y0 + cellSize - .5;
 
                 shipHull.push([x0, y0], [x0, y1], [x1, y0], [x1, y1])
             }
