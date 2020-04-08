@@ -65,8 +65,8 @@ const isOverlapping = (x, y, template, placedShips, board = placedShipsToBoard(p
                 for (let [xd, yd] of neighborDiff) {
                     const ny = i + y + yd;
                     const nx = j + x + xd;
-                    if (ny > -1 && ny < 10 &&
-                        nx > -1 && ny < 10 &&
+                    if ((ny > -1 && ny < 10) &&
+                        (nx > -1 && nx < 10) &&
                         board[ny][nx] !== "") {
                         return true;
                     }
@@ -279,7 +279,7 @@ export function SetupBoard({usePlacedShips, title}) {
                 className="button"
                 onClick={fillBoardWithRandom}>Random layout
             </button>
-            {/*<ShipSelector setDraggedShip={handleDraggedShip}/>*/}
+            <ShipSelector setDraggedShip={handleDraggedShip}/>
         </div>
     );
 }

@@ -167,7 +167,6 @@ function getComputerShots(ship, placedShots, placedAutoShots) {
     const neighborDiff = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]];
     const shipTemplate = shipTemplatePoints(ship);
     const autoShots = [];
-    console.log(shipTemplate);
 
     for (let i = 0; i < ship.hits.length; i++) {
         const [hx, hy] = ship.hits[i];
@@ -176,7 +175,7 @@ function getComputerShots(ship, placedShots, placedAutoShots) {
             const ny = hy + yd;
             const nx = hx + xd;
             if (ny > -1 && ny < 10 &&
-                nx > -1 && ny < 10) {
+                nx > -1 && nx < 10) {
                 if (!alreadyPlaced(nx, ny, autoShots) &&
                     !alreadyPlaced(nx, ny, placedShots) &&
                     !alreadyPlaced(nx, ny, shipTemplate) &&
