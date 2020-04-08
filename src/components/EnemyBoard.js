@@ -1,7 +1,8 @@
 import React, {Fragment, useState} from "react";
 import {BlankBoard, cellSize, gap} from "./Board";
-import {getRandomColor} from "../core/util";
+import {getDimensions, getRandomColor} from "../core/util";
 import {placedShipsToBoard} from "./SetupBoard";
+import hull from "hull.js"
 
 function PlacedShots({placedShots, shotSource}) {
     if (placedShots) {
@@ -52,12 +53,11 @@ const addHit = (target, x, y) => {
 
 const isSunken = ({template, hits}) => {
     const size = template.flat(5).reduce((previous, current) => current += previous);
-    console.log("size", size);
     return size === hits.length
 };
 
 
-function ShipHits({hits, isSunken}) {
+function ShipHits({hits}) {
     return hits.map(([x, y]) => {
         let sx = (x + 1) * cellSize + ((x + 1) * gap);
         let sy = (y + 1) * cellSize + ((y + 1) * gap);
@@ -82,15 +82,59 @@ function ShipHits({hits, isSunken}) {
     })
 }
 
-function BombedShips({ships}) {
-    console.log(ships);
+function baseCoord(c, ct) {
+    return (c + ct + 1) * cellSize + ((c + ct + 1) * gap)
+}
 
-    return ships.map(({isSunken, hits, uuid}) => {
+function HullToD(hull) {
+    let d = `M ${hull[0][0]} ${hull[0][1]}`;
+
+    for (let i = 1; i < hull.length; i++) {
+        d += ` ${hull[i][0]} ${hull[i][1]}`;
+    }
+
+    return d;
+}
+
+function ShipHull({ship}) {
+    let shipHull = [];
+    const {template, x, y} = ship;
+    const {rows, cols} = getDimensions(template);
+
+    for (let yt = 0; yt < rows; yt++) {
+        for (let xt = 0; xt < cols; xt++) {
+            if (template[yt][xt]) {
+                const x0 = baseCoord(x, xt) + 0.5;
+                const y0 = baseCoord(y, yt) + 0.5;
+
+                const x1 = x0 + cellSize - 1;
+                const y1 = y0 + cellSize - 1;
+
+                shipHull.push([x0, y0], [x0, y1], [x1, y0], [x1, y1])
+            }
+        }
+    }
+
+    return (
+        <path
+            fill="transparent"
+            stroke="var(--button-primary-bgcolor)"
+            strokeWidth="1"
+            d={HullToD(hull(shipHull, 1))}
+        />
+    );
+}
+
+function BombedShips({ships}) {
+    return ships.map((ship) => {
+        const {isSunken, hits, uuid} = ship;
+
         return (
             <g key={uuid}
                className={`bombed-ship bombed-ship--${isSunken}`}>
-                <ShipHits hits={hits}
-                          isSunken={isSunken}/>
+                <ShipHits hits={hits}/>
+                {isSunken &&
+                <ShipHull ship={ship}/>}
             </g>
         )
     })
@@ -126,9 +170,7 @@ function getComputerShots(ship, placedShots, placedAutoShots) {
         }
 
     }
-    // generate all possible auto shots
 
-    // remove already placed shots by player
     return autoShots;
 }
 

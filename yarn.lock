@@ -5138,6 +5138,11 @@ https-browserify@^1.0.0:
   resolved "https://registry.yarnpkg.com/https-browserify/-/https-browserify-1.0.0.tgz#ec06c10e0a34c0f2faf199f7fd7fc78fffd03c73"
   integrity sha1-7AbBDgo0wPL68Zn3/X/Hj//QPHM=
 
+hull.js@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/hull.js/-/hull.js-1.0.0.tgz#509bf09384a9959c6f8b9c66abe07056f6f25f8d"
+  integrity sha512-JwKyla57UJdor52LI17jJ00aRzwYZUrq/V+WkOSQoF0ZuBz1NBwAyI7VzDmSFSPqUrgVJc3HCvqnMQzUW6Ku9w==
+
 iconv-lite@0.4.24, iconv-lite@^0.4.24:
   version "0.4.24"
   resolved "https://registry.yarnpkg.com/iconv-lite/-/iconv-lite-0.4.24.tgz#2022b4b25fbddc21d2f524974a474aafe733908b"
