@@ -149,9 +149,25 @@ function alreadyPlaced(x, y, shots) {
     return false;
 }
 
+function shipTemplatePoints({x, y, template}) {
+    const {rows, cols} = getDimensions(template);
+    let templatePoints = [];
+
+    for (let yt = 0; yt < rows; yt++) {
+        for (let xt = 0; xt < cols; xt++) {
+            if (template[yt][xt]) {
+                templatePoints.push([x + xt, y + yt])
+            }
+        }
+    }
+    return templatePoints;
+}
+
 function getComputerShots(ship, placedShots, placedAutoShots) {
     const neighborDiff = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]];
+    const shipTemplate = shipTemplatePoints(ship);
     const autoShots = [];
+    console.log(shipTemplate);
 
     for (let i = 0; i < ship.hits.length; i++) {
         const [hx, hy] = ship.hits[i];
@@ -163,6 +179,7 @@ function getComputerShots(ship, placedShots, placedAutoShots) {
                 nx > -1 && ny < 10) {
                 if (!alreadyPlaced(nx, ny, autoShots) &&
                     !alreadyPlaced(nx, ny, placedShots) &&
+                    !alreadyPlaced(nx, ny, shipTemplate) &&
                     !alreadyPlaced(nx, ny, placedAutoShots)) {
                     autoShots.push([nx, ny]);
                 }
