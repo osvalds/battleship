@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {Board} from "./Board";
 import {
     allShipPermutationsFlat,
@@ -162,10 +162,10 @@ export function SetupBoard({usePlacedShips, title}) {
     }, [setHoveredCell]);
 
     const handleDraggedShip = useCallback((shipTemplate, x, y) => {
-
+        console.log("handle dragged ship")
         const shipUUID = uuidv4();
 
-        const offset = calculateOffset(shipTemplate, x, y)
+        const offset = calculateOffset(shipTemplate, x, y);
 
         setDraggedShip({
             template: shipTemplate,
@@ -198,7 +198,7 @@ export function SetupBoard({usePlacedShips, title}) {
 
     }, [draggedShip, setDraggedShip, hoveredCell, placedShips]);
 
-    const handleOnMouseUp = useCallback(() => {
+    const handleOnMouseUp = useCallback((e) => {
         if (draggedShip?.isSnapping &&
             draggedShip.inBounds &&
             !draggedShip.isOverlapping) {
@@ -231,7 +231,7 @@ export function SetupBoard({usePlacedShips, title}) {
 
         setDraggedShip(ship);
         setPlacedShips(newPlaced);
-    }, [placedShips]);
+    }, [placedShips, setPlacedShips, setDraggedShip]);
 
     const fillBoardWithRandom = () => {
         setPlacedShips(getRandomShipPlacement());
@@ -252,20 +252,42 @@ export function SetupBoard({usePlacedShips, title}) {
         console.log(`sum: ${sum} ms`);
     };
 
+    const handleOnMouseMove = useCallback((e) => {
+        if (draggedShip !== null && (e.buttons === 1 || e.buttons === 3)) {
+            setDraggingPosition({x: e.clientX, y: e.clientY});
+            handleDraggedShipSnapping()
+        }
+    }, [draggedShip, setDraggingPosition, handleDraggedShipSnapping]);
+
+    useEffect(() => {
+        document.addEventListener("mousemove", handleOnMouseMove);
+
+        return () =>
+            document.removeEventListener("mousemove", handleOnMouseMove)
+
+    }, [handleOnMouseMove]);
+
+    const handleOnMouseDown = useCallback((e) => {
+        setDraggingPosition({x: e.clientX, y: e.clientY})
+    }, [setDraggingPosition]);
+
+    useEffect(() => {
+        document.addEventListener("mousedown", handleOnMouseDown, false);
+
+        return () =>
+            document.removeEventListener("mousemove", handleOnMouseDown, false)
+    }, []);
+
+    useEffect(() => {
+        document.addEventListener("mouseup", handleOnMouseUp, false);
+
+        return () =>
+            document.removeEventListener("mouseup", handleOnMouseUp, false)
+
+    }, [handleOnMouseUp]);
 
     return (
-        <div className="setup-board"
-             onMouseDown={e => {
-                 setDraggingPosition({x: e.clientX, y: e.clientY})
-             }}
-             onMouseMove={(e) => {
-                 if (draggedShip !== null && (e.buttons === 1 || e.buttons === 3)) {
-                     setDraggingPosition({x: e.clientX, y: e.clientY});
-                     handleDraggedShipSnapping()
-                 }
-             }}
-             onMouseUp={handleOnMouseUp}
-        >
+        <div className="setup-board">
             <Board placedShips={placedShips}
                    handleCellMouseEnter={handleCellMouseEnter}
                    handlePlacedShipDragging={handleDraggingOnPlacedShip}

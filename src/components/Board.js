@@ -13,7 +13,7 @@ const rowNames = Array(10).fill().map((_, i) => i + 1);
 const containerWidth = cellSize * boardCols + boardCols;
 const containerHeight = cellSize * boardRows + boardRows;
 
-function BoardShip({x, y, template, cellSize = 10, gap = 1, handleMouseDown, uuid}) {
+const BoardShip = React.memo(({x, y, template, cellSize = 10, gap = 1, handleMouseDown, uuid}) => {
     return (
         <g onMouseDown={() => handleMouseDown(-1, -1)}>
             {template.map((row, ys) => row.map((cell, xs) => {
@@ -39,7 +39,7 @@ function BoardShip({x, y, template, cellSize = 10, gap = 1, handleMouseDown, uui
 
         </g>
     )
-}
+})
 
 const getStrokeColor = (draggedShip) => {
     if (!draggedShip.inBounds) {
@@ -123,7 +123,7 @@ const NumberRow = React.memo(({numbers, handleMouseEnter}) => {
     )
 });
 
-const BlankPlaceholders = ({cols, rows, handleMouseEnter, className, handleClick = () => null}) => {
+const BlankPlaceholders = React.memo(({cols, rows, handleMouseEnter, className, handleClick = () => null}) => {
     return (
         <g className="blank-placeholders">
             {cols.map((letter, x) => {
@@ -143,7 +143,7 @@ const BlankPlaceholders = ({cols, rows, handleMouseEnter, className, handleClick
             })}
         </g>
     )
-}
+})
 
 export function Board({placedShips, draggingPosition, handleCellMouseEnter, draggedShip, handlePlacedShipDragging}) {
     return (

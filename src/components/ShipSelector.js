@@ -12,10 +12,7 @@ export const shipSize1 = [
 export const shipSize2 = [
     {
         mutations: 1,
-        template: [
-            [1],
-            [1]
-        ]
+        template: [[1, 1]]
     },
 ];
 
@@ -47,12 +44,7 @@ export const shipSize4 = [
     },
     {
         mutations: 1,
-        template: [
-            [1],
-            [1],
-            [1],
-            [1]
-        ]
+        template: [[1, 1, 1, 1]]
     },
     {
         mutations: 3,
@@ -119,7 +111,7 @@ export const allShipPermutationsFlat = (shipTemplates) => {
     return createAllShipPermutations(shipTemplates).flat();
 }
 
-function ShipTemplateRow({templates, setDraggedShip, templateName}) {
+const ShipTemplateRow = React.memo(({templates, setDraggedShip, templateName}) => {
     return (
         <div className="ship-template-row">
             {templates.map((shipTemplate, i) => <Ship ship={shipTemplate}
@@ -127,38 +119,39 @@ function ShipTemplateRow({templates, setDraggedShip, templateName}) {
                                                       setDraggedShip={setDraggedShip}/>)}
         </div>
     )
-}
+})
 
-export function ShipSelector({setDraggedShip}) {
-    const allShip1 = createAllShipPermutations(shipSize1);
-    const allShip2 = createAllShipPermutations(shipSize2);
-    const allShip3 = createAllShipPermutations(shipSize3);
-    const allShip4 = createAllShipPermutations(shipSize4);
-    return (
-        // null
-        <div className="ship-selector">
-            {allShip1.map((templates, i) => <ShipTemplateRow key={`allship1-${i}`}
-                                                             setDraggedShip={setDraggedShip}
-                                                             templateName="allship1"
-                                                             templates={templates}/>)}
+export const ShipSelector = React.memo(({setDraggedShip}) => {
+        const allShip1 = createAllShipPermutations(shipSize1);
+        const allShip2 = createAllShipPermutations(shipSize2);
+        const allShip3 = createAllShipPermutations(shipSize3);
+        const allShip4 = createAllShipPermutations(shipSize4);
+        return (
+            // null
+            <div className="ship-selector">
+                {allShip1.map((templates, i) => <ShipTemplateRow key={`allship1-${i}`}
+                                                                 setDraggedShip={setDraggedShip}
+                                                                 templateName="allship1"
+                                                                 templates={templates}/>)}
 
-            {allShip2.map((templates, i) => <ShipTemplateRow key={`allship2-${i}`}
-                                                             setDraggedShip={setDraggedShip}
-                                                             templateName="allship2"
-                                                             templates={templates}/>)}
+                {allShip2.map((templates, i) => <ShipTemplateRow key={`allship2-${i}`}
+                                                                 setDraggedShip={setDraggedShip}
+                                                                 templateName="allship2"
+                                                                 templates={templates}/>)}
 
-            {allShip3.map((templates, i) => <ShipTemplateRow key={`allship3-${i}`}
-                                                             setDraggedShip={setDraggedShip}
-                                                             templateName="allship3"
-                                                             templates={templates}/>)}
+                {allShip3.map((templates, i) => <ShipTemplateRow key={`allship3-${i}`}
+                                                                 setDraggedShip={setDraggedShip}
+                                                                 templateName="allship3"
+                                                                 templates={templates}/>)}
 
-            {allShip4.map((templates, i) => <ShipTemplateRow key={`allship4-${i}`}
-                                                             templates={templates}
-                                                             templateName="allship4"
-                                                             setDraggedShip={setDraggedShip}/>)}
+                {allShip4.map((templates, i) => <ShipTemplateRow key={`allship4-${i}`}
+                                                                 templates={templates}
+                                                                 templateName="allship4"
+                                                                 setDraggedShip={setDraggedShip}/>)}
 
-        </div>
+            </div>
 
-    )
+        )
 
-}
+    }
+)
