@@ -151,6 +151,7 @@ export function Board({placedShips, draggingPosition, handleCellMouseEnter, drag
             {draggedShip && draggedShip.isDragging &&
             <div style={{
                 position: "fixed",
+                zIndex: "1",
                 left: draggingPosition.x,
                 top: draggingPosition.y,
                 pointerEvents: "none",

@@ -26,6 +26,11 @@
   transition: .2s linear;
   user-select: none;
   margin-bottom: 8px;
+  margin-right: 8px;
+
+  &:last-of-type {
+    margin-right: 0;
+  }
 
   &:hover, &:focus, &:active {
     background-color: var(--button-hover-color);

@@ -237,6 +237,10 @@ export function SetupBoard({usePlacedShips, title}) {
         setPlacedShips(getRandomShipPlacement());
     };
 
+    const resetBoard = () => {
+        setPlacedShips([])
+    };
+
     // for internal board algorithm testing
     const tryLots = () => {
         let results = [];
@@ -305,6 +309,11 @@ export function SetupBoard({usePlacedShips, title}) {
                     className="button"
                     onClick={fillBoardWithRandom}>
                     Random layout
+                </button>
+                <button
+                    className="button"
+                    onClick={resetBoard}>
+                    Reset layout
                 </button>
             </div>
             <ShipSelector setDraggedShip={handleDraggedShip}/>

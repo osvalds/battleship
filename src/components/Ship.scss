@@ -1,6 +1,9 @@
 .ship {
   width: 100%;
-  border: 1px solid red;
+  margin-right: $max-width / 22;
+  &:last-of-type {
+    margin-right: 0;
+  }
 
   svg {
     display: block;
