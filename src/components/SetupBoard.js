@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {Fragment, useCallback, useEffect, useState} from 'react';
 import {Board} from "./Board";
 import {
     allShipPermutationsFlat,
@@ -268,7 +268,10 @@ export function SetupBoard({usePlacedShips, title}) {
     }, [handleOnMouseMove]);
 
     const handleOnMouseDown = useCallback((e) => {
-        setDraggingPosition({x: e.clientX, y: e.clientY})
+        if (e.buttons === 1 || e.buttons === 3) {
+            setDraggingPosition({x: e.clientX, y: e.clientY})
+        }
+
     }, [setDraggingPosition]);
 
     useEffect(() => {
@@ -287,21 +290,24 @@ export function SetupBoard({usePlacedShips, title}) {
     }, [handleOnMouseUp]);
 
     return (
-        <div className="setup-board">
-            <Board placedShips={placedShips}
-                   handleCellMouseEnter={handleCellMouseEnter}
-                   handlePlacedShipDragging={handleDraggingOnPlacedShip}
-                   draggedShip={draggedShip}
-                   hoveredCell={hoveredCell}
-                   draggingPosition={draggingPosition}/>
-            <h2 className="u-h2">
-                {title}
-            </h2>
-            <button
-                className="button"
-                onClick={fillBoardWithRandom}>Random layout
-            </button>
+        <Fragment>
+            <div className="setup-wrapper">
+                <Board placedShips={placedShips}
+                       handleCellMouseEnter={handleCellMouseEnter}
+                       handlePlacedShipDragging={handleDraggingOnPlacedShip}
+                       draggedShip={draggedShip}
+                       hoveredCell={hoveredCell}
+                       draggingPosition={draggingPosition}/>
+                <h2 className="u-h2">
+                    {title}
+                </h2>
+                <button
+                    className="button"
+                    onClick={fillBoardWithRandom}>
+                    Random layout
+                </button>
+            </div>
             <ShipSelector setDraggedShip={handleDraggedShip}/>
-        </div>
+        </Fragment>
     );
 }

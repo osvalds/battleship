@@ -73,10 +73,11 @@ html, body, #root, .App {
 
   &__row {
     margin: 24px 24px;
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    justify-content: space-between;
+    display: grid;
+    grid-template-areas:  "player-board enemy-board"
+                          "ship-selector ship-selector";
+    grid-template-columns: repeat(2, minmax(400px, 1fr));
+
   }
 }
 

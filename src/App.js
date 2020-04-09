@@ -16,11 +16,9 @@ function App() {
     return (
         <div className="App">
             <div className="App__row">
-
                 <SetupBoard
                     title="🧗‍ board"
                     usePlacedShips={[playerPlacedShips, setPlayerPlacedShips]}/>
-
                 <EnemyBoard
                     title="🤖's board (enemy)"
                     useEnemyShips={[computerPlacedShips, setComputerPlacedShips]}

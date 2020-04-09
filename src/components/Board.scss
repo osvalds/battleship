@@ -1,6 +1,7 @@
 $max-width: 400px;
 .board {
   user-select: none;
+  width: 100%;
   max-width: $max-width;
 }
 

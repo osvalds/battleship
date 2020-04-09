@@ -147,61 +147,59 @@ const BlankPlaceholders = React.memo(({cols, rows, handleMouseEnter, className, 
 
 export function Board({placedShips, draggingPosition, handleCellMouseEnter, draggedShip, handlePlacedShipDragging}) {
     return (
-        <div>
-            <div className="board">
-                {draggedShip && draggedShip.isDragging &&
-                <div style={{
-                    position: "fixed",
-                    left: draggingPosition.x,
-                    top: draggingPosition.y,
+        <div className="board">
+            {draggedShip && draggedShip.isDragging &&
+            <div style={{
+                position: "fixed",
+                left: draggingPosition.x,
+                top: draggingPosition.y,
+                pointerEvents: "none",
+                transform: getTransform(draggedShip.template, draggedShip.offset.x, draggedShip.offset.y)
+            }}>
+                <Ship ship={draggedShip.template}/>
+            </div>}
+
+            <svg viewBox={`0 0 ${containerWidth} ${containerHeight}`}
+                 onMouseLeave={() => handleCellMouseEnter({x: -1, y: -1})}
+                 xmlns="http://www.w3.org/2000/svg">
+
+
+                <BlankPlaceholders cols={colNames}
+                                   rows={rowNames}
+                                   handleMouseEnter={handleCellMouseEnter}/>
+
+                <g style={draggedShip ? {
                     pointerEvents: "none",
-                    transform: getTransform(draggedShip.template, draggedShip.offset.x, draggedShip.offset.y)
+                    fill: "white",
+                } : {
+                    fill: "white",
                 }}>
-                    <Ship ship={draggedShip.template}/>
-                </div>}
+                    {
+                        placedShips.map(ship => <BoardShip template={ship.template}
+                                                           uuid={ship.uuid}
+                                                           key={ship.uuid}
+                                                           handleMouseDown={(x, y) => handlePlacedShipDragging(ship, x, y)}
+                                                           x={ship.x}
+                                                           y={ship.y}/>)
+                    }
+                </g>
 
-                <svg viewBox={`0 0 ${containerWidth} ${containerHeight}`}
-                     onMouseLeave={() => handleCellMouseEnter({x: -1, y: -1})}
-                     xmlns="http://www.w3.org/2000/svg">
+                {draggedShip && draggedShip.isSnapping &&
+                <g style={{
+                    pointerEvents: "none",
+                    fill: getStrokeColor(draggedShip),
+                }}>
+                    <BoardShip template={draggedShip.template}
+                               uuid={draggedShip.uuid}
+                               x={draggedShip.x}
+                               y={draggedShip.y}/>
+                </g>}
+                <LetterRow letters={colNames}
+                           handleMouseEnter={() => handleCellMouseEnter({x: -1, y: -1})}/>
 
-
-                    <BlankPlaceholders cols={colNames}
-                                       rows={rowNames}
-                                       handleMouseEnter={handleCellMouseEnter}/>
-
-                    <g style={draggedShip ? {
-                        pointerEvents: "none",
-                        fill: "white",
-                    } : {
-                        fill: "white",
-                    }}>
-                        {
-                            placedShips.map(ship => <BoardShip template={ship.template}
-                                                               uuid={ship.uuid}
-                                                               key={ship.uuid}
-                                                               handleMouseDown={(x, y) => handlePlacedShipDragging(ship, x, y)}
-                                                               x={ship.x}
-                                                               y={ship.y}/>)
-                        }
-                    </g>
-
-                    {draggedShip && draggedShip.isSnapping &&
-                    <g style={{
-                        pointerEvents: "none",
-                        fill: getStrokeColor(draggedShip),
-                    }}>
-                        <BoardShip template={draggedShip.template}
-                                   uuid={draggedShip.uuid}
-                                   x={draggedShip.x}
-                                   y={draggedShip.y}/>
-                    </g>}
-                    <LetterRow letters={colNames}
-                               handleMouseEnter={() => handleCellMouseEnter({x: -1, y: -1})}/>
-
-                    <NumberRow numbers={rowNames}
-                               handleMouseEnter={() => handleCellMouseEnter({x: -1, y: -1})}/>
-                </svg>
-            </div>
+                <NumberRow numbers={rowNames}
+                           handleMouseEnter={() => handleCellMouseEnter({x: -1, y: -1})}/>
+            </svg>
         </div>
     )
 }

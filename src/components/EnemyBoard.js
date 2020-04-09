@@ -219,7 +219,7 @@ export function EnemyBoard({usePlacedShots, useEnemyShips, title}) {
 
 
     return (
-        <div className="setup-board">
+        <div className="enemy-board">
             <BlankBoard handleCellMouseEnter={() => null}
                         onCellClick={onCellClick}>
                 <PlacedShots placedShots={placedShots}
