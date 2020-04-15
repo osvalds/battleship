@@ -72,6 +72,11 @@
   margin-right: $max-width / 11;
   position: relative;
 
+  &--disabled {
+    opacity: .6;
+    pointer-events: none;
+  }
+
   &__label {
     user-select: none;
     font-size: 16px;

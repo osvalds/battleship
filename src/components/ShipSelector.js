@@ -1,6 +1,7 @@
 import React, {Fragment, useCallback, useState} from "react";
 import {Ship} from "./Ship";
 import {getDimensions} from "../core/util";
+import classNames from "classnames"
 
 export const shipSize1 = [
     {
@@ -220,8 +221,10 @@ const ShipWithTooltip = React.memo(({templates, setDraggedShip, draggedShip, w})
 })
 
 const ShipGroup = React.memo(({allowed, children}) => {
+    const sCN = classNames("ship-group", {"ship-group--disabled": allowed <= 0})
+
     return (
-        <div className="ship-group">
+        <div className={sCN}>
             <div className="ship-group__label">
                 {allowed}×
             </div>
