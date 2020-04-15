@@ -26,6 +26,7 @@ const BoardShip = React.memo(({x, y, template, cellSize = 10, gap = 1, handleMou
                                 e.stopPropagation()
                             }}
                             strokeWidth="2"
+                            stroke="transparent"
                             x={(x + xs + 1) * cellSize + ((x + xs + 1) * gap)}
                             y={(y + ys + 1) * cellSize + ((y + ys + 1) * gap)}
                             width={cellSize}
