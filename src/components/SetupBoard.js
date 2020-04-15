@@ -297,8 +297,8 @@ export function SetupBoard({usePlacedShips, title}) {
         document.addEventListener("mousedown", handleOnMouseDown, false);
 
         return () =>
-            document.removeEventListener("mousemove", handleOnMouseDown, false)
-    }, []);
+            document.removeEventListener("mousedown", handleOnMouseDown, false)
+    }, [handleOnMouseDown]);
 
     useEffect(() => {
         document.addEventListener("mouseup", handleOnMouseUp, false);
