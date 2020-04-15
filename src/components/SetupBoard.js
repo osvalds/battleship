@@ -162,7 +162,6 @@ export function SetupBoard({usePlacedShips, title}) {
     }, [setHoveredCell]);
 
     const handleDraggedShip = useCallback((shipTemplate, x, y) => {
-        console.log("handle dragged ship")
         const shipUUID = uuidv4();
 
         const offset = calculateOffset(shipTemplate, x, y);
@@ -316,7 +315,9 @@ export function SetupBoard({usePlacedShips, title}) {
                     Reset layout
                 </button>
             </div>
-            <ShipSelector setDraggedShip={handleDraggedShip}/>
+            <ShipSelector
+                draggedShip={draggedShip}
+                setDraggedShip={handleDraggedShip}/>
         </Fragment>
     );
 }

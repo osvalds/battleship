@@ -2,7 +2,6 @@
   grid-area: ship-selector;
   display: flex;
   align-items: flex-start;
-  overflow: auto;
   height: 100%;
   flex-wrap: wrap;
   margin-top: 12px;
@@ -18,9 +17,40 @@
 
 .ship-with-tooltip {
   margin-right: $max-width / 22;
-
+  position: relative;
   &:last-of-type {
     margin-right: 0;
+  }
+
+  &__box {
+    padding: $max-width / 22 0 0 $max-width / 22;
+    z-index: 1;
+    top:-20px;
+    margin-bottom: 2%;
+    left: 50%;
+    width: 500px;
+    background: #222831;
+    box-shadow: rgba(136, 153, 166, 0.2) 0px 0px 15px, rgba(136, 153, 166, 0.15) 0px 0px 3px 1px;
+    max-width: 500px;
+    border: 1px solid #38444d;
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    transform: translate(-50%, -100%);
+    position: absolute;
+
+    //works as a bridge to the main box
+    &:before {
+      content: "";
+      position: absolute;
+      height: 20px;
+      bottom: -20px;
+      width: 100%;
+      left: 0;
+    }
+    .ship {
+      margin-bottom: $max-width / 22;;
+    }
   }
 }
 
