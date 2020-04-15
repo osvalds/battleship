@@ -22,3 +22,9 @@ export function getDimensions(template) {
         cols: template[0].length
     };
 }
+
+export function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}

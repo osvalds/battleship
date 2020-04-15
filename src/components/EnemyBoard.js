@@ -41,7 +41,7 @@ export function PlacedShots({placedShots, shotSource}) {
     }
 }
 
-const addHit = (target, x, y) => {
+export const addHit = (target, x, y) => {
     if (target?.hits) {
         const filteredHits = target.hits.filter(([hx, hy]) => !(hx === x && hy === y));
         return {
@@ -57,7 +57,7 @@ const addHit = (target, x, y) => {
 
 };
 
-const isSunken = ({template, hits}) => {
+export const isSunken = ({template, hits}) => {
     const size = template.flat(5).reduce((previous, current) => current += previous);
     return size === hits.length
 };
@@ -142,7 +142,7 @@ export function BombedShips({ships}) {
     })
 }
 
-function alreadyPlaced(x, y, shots) {
+export function alreadyPlaced(x, y, shots) {
     for (let i = 0, s = shots.length; i < s; i++) {
         if (shots[i][0] === x && shots[i][1] === y) {
             return true;
@@ -165,7 +165,7 @@ function shipTemplatePoints({x, y, template}) {
     return templatePoints;
 }
 
-function getComputerShots(ship, placedShots, placedAutoShots) {
+export function getComputerShots(ship, placedShots, placedAutoShots) {
     const neighborDiff = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]];
     const shipTemplate = shipTemplatePoints(ship);
     const autoShots = [];
@@ -192,7 +192,7 @@ function getComputerShots(ship, placedShots, placedAutoShots) {
     return autoShots;
 }
 
-export function EnemyBoard({usePlacedShots, useEnemyShips, title, gameCanStart, isDisabled, onStartClick, gameState, useAutoShots}) {
+export function EnemyBoard({usePlacedShots, useEnemyShips, title, gameCanStart, isDisabled, onStartClick, gameState, useAutoShots, onMissedShot}) {
     const [placedShots, setPlacedShots] = usePlacedShots;
     const [placedComputerShots, setPlacedComputerShots] = useAutoShots;
 
@@ -214,6 +214,7 @@ export function EnemyBoard({usePlacedShots, useEnemyShips, title, gameCanStart, 
             setEnemyShips(newPlaced.concat([targetShip]))
 
         } else {
+            onMissedShot()
             setPlacedShots(newPlaced.concat([[x, y]]));
         }
     };

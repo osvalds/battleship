@@ -1,12 +1,7 @@
 import React, {Fragment, useCallback, useEffect, useState} from 'react';
 import {Board} from "./Board";
-import {
-    allShipPermutationsFlat,
-    ShipSelector,
-    shipSize1,
-    shipSize2, shipSize3, shipSize4
-} from "./ShipSelector";
-import {getDimensions, uuidv4} from "../core/util";
+import {allShipPermutationsFlat, ShipSelector, shipSize1, shipSize2, shipSize3, shipSize4} from "./ShipSelector";
+import {getDimensions, getRandomInt, uuidv4} from "../core/util";
 
 const centerOffset = (template) => {
     const {rows, cols} = getDimensions(template);
@@ -16,12 +11,6 @@ const centerOffset = (template) => {
         y: Math.floor((rows - 1) / 2)
     }
 };
-
-function getRandomInt(min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-}
 
 const inBounds = (x, y, template) => {
     const {rows, cols} = getDimensions(template);
