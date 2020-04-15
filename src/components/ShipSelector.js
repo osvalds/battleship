@@ -212,11 +212,11 @@ const ShipWithTooltip = React.memo(({templates, setDraggedShip, templateName}) =
     )
 })
 
-const ShipGroup = React.memo(({size, children}) => {
+const ShipGroup = React.memo(({allowed, children}) => {
     return (
         <div className="ship-group">
             <div className="ship-group__label">
-                {size}×
+                {allowed}×
             </div>
             {children}
         </div>
@@ -239,19 +239,19 @@ export const ShipSelector = React.memo(({setDraggedShip}) => {
 
         return (
             <div className="ship-selector">
-                <ShipGroup size={4}>
+                <ShipGroup allowed={4}>
                     <ShipWithTooltip key={`ship1`}
                                      setDraggedShip={setDraggedShip}
                                      templateName="ship1"
                                      templates={ship1Rotated}/>
                 </ShipGroup>
-                <ShipGroup size={3}>
+                <ShipGroup allowed={3}>
                     <ShipWithTooltip key={`ship2`}
                                      setDraggedShip={setDraggedShip}
                                      templateName="ship2"
                                      templates={ship2Rotated}/>
                 </ShipGroup>
-                <ShipGroup size={2}>
+                <ShipGroup allowed={2}>
                     <ShipWithTooltip key={`allship3-straight`}
                                      setDraggedShip={setDraggedShip}
                                      templateName="ship3-straight"
@@ -262,7 +262,7 @@ export const ShipSelector = React.memo(({setDraggedShip}) => {
                                      templateName="ship3-l"
                                      templates={ship3LRotated}/>
                 </ShipGroup>
-                <ShipGroup size={1}>
+                <ShipGroup allowed={1}>
                     <ShipWithTooltip key={`allship4-straight`}
                                      setDraggedShip={setDraggedShip}
                                      templateName="ship4-straight"
