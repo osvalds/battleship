@@ -5,8 +5,6 @@ import {addHit, alreadyPlaced, EnemyBoard, getComputerShots, isSunken} from "./c
 import {PlayerBoard} from "./components/PlayerBoard";
 import {getRandomInt} from "./core/util"
 
-const gameStates = ["SETUP", "PLAYING", "FINISHED"]
-
 const placeShot = ({x, y}, placedShots, setPlacedShots, placedComputerShots, setPlacedComputerShots, enemyShips, setEnemyShips, onMissedShot) => {
     let newPlaced = [...placedShots];
     const board = placedShipsToBoard(enemyShips);
@@ -32,7 +30,7 @@ const getRandomValidTarget = (ships, shots, autoShots) => {
     const shipShots = ships.map(ship => ship.hits)
         .filter(hit => hit !== undefined)
         .flat()
-    console.log(shipShots);
+
     let allPositions = [];
 
     for (let y = 0; y < 10; y++) {
@@ -103,7 +101,6 @@ function App() {
 
     useEffect(() => {
         let timer = null;
-        console.log("running")
         // computer's turn to make a move
         if (gameState === "PLAYING" && !isPlayerTurn) {
             timer = setTimeout(() => {
@@ -138,7 +135,7 @@ function App() {
 
     useEffect(() => {
         if (computerPlacedShips.every(ship => ship.isSunken) ||
-            playerPlacedShips.every(ship => ship.isSunken)) {
+            (playerPlacedShips.every(ship => ship.isSunken) && playerPlacedShips.length > 0)) {
             setGameState("FINISHED")
         }
     }, [playerPlacedShips, computerPlacedShips, setGameState])
@@ -148,6 +145,7 @@ function App() {
             <div className="App__row">
                 {gameState === "FINISHED" &&
                 <GameFinished playerShips={playerPlacedShips}
+                              isPlayerTurn={isPlayerTurn}
                               computerShips={computerPlacedShips}/>
                 }
 
