@@ -151,6 +151,22 @@ export const getRandomShipPlacement = () => {
     return placedShips;
 };
 
+const templateSize = (template) => {
+    return template.flat(2).reduce((previous, current) => current += previous);
+}
+
+const shipCountsOnBoard = (placedShips) => {
+    let validShipCount = [4, 3, 2, 1];
+    for (let placedShip of placedShips) {
+        validShipCount[templateSize(placedShip.template) - 1]--;
+    }
+    return validShipCount;
+}
+
+export const isValidShipCount = (ships) => {
+    return shipCountsOnBoard(ships).every(i => i === 0)
+}
+
 export function SetupBoard({usePlacedShips, title}) {
     const [placedShips, setPlacedShips] = usePlacedShips;
     const [draggedShip, setDraggedShip] = useState(null);
@@ -316,6 +332,7 @@ export function SetupBoard({usePlacedShips, title}) {
                 </button>
             </div>
             <ShipSelector
+                allowedCounts={shipCountsOnBoard(placedShips)}
                 draggedShip={draggedShip}
                 setDraggedShip={handleDraggedShip}/>
         </Fragment>

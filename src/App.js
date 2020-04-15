@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {getRandomShipPlacement, SetupBoard} from "./components/SetupBoard";
+import {getRandomShipPlacement, SetupBoard, isValidShipCount} from "./components/SetupBoard";
 import './App.scss';
 import {EnemyBoard} from "./components/EnemyBoard";
 
@@ -21,6 +21,7 @@ function App() {
                     usePlacedShips={[playerPlacedShips, setPlayerPlacedShips]}/>
                 <EnemyBoard
                     title="🤖's board (enemy)"
+                    gameCanStart={isValidShipCount(playerPlacedShips)}
                     useEnemyShips={[computerPlacedShips, setComputerPlacedShips]}
                     usePlacedShots={[playerPlacedShots, setPlayerPlacedShots]}/>
 

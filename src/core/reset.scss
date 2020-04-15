@@ -82,6 +82,7 @@ html, body, #root, .App {
 }
 
 .u-h2 {
+  user-select: none;
   font-size: 20px;
   margin: 16px 0;
 }

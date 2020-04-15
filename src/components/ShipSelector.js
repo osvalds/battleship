@@ -230,7 +230,7 @@ const ShipGroup = React.memo(({allowed, children}) => {
     )
 })
 
-export const ShipSelector = React.memo(({draggedShip, setDraggedShip}) => {
+export const ShipSelector = React.memo(({draggedShip, setDraggedShip, allowedCounts}) => {
         const ship1Rotated = getAllRotations(ship1);
 
         const ship2Rotated = getAllRotations(ship2);
@@ -246,13 +246,13 @@ export const ShipSelector = React.memo(({draggedShip, setDraggedShip}) => {
 
         return (
             <div className="ship-selector">
-                <ShipGroup allowed={4}>
+                <ShipGroup allowed={allowedCounts[0]}>
                     <ShipWithTooltip key={`ship1`}
                                      setDraggedShip={setDraggedShip}
                                      templateName="ship1"
                                      templates={ship1Rotated}/>
                 </ShipGroup>
-                <ShipGroup allowed={3}>
+                <ShipGroup allowed={allowedCounts[1]}>
                     <ShipWithTooltip key={`ship2`}
                                      draggedShip={draggedShip}
                                      setDraggedShip={setDraggedShip}
@@ -260,7 +260,7 @@ export const ShipSelector = React.memo(({draggedShip, setDraggedShip}) => {
                                      templateName="ship2"
                                      templates={ship2Rotated}/>
                 </ShipGroup>
-                <ShipGroup allowed={2}>
+                <ShipGroup allowed={allowedCounts[2]}>
                     <ShipWithTooltip key={`allship3-straight`}
                                      draggedShip={draggedShip}
                                      setDraggedShip={setDraggedShip}
@@ -275,7 +275,7 @@ export const ShipSelector = React.memo(({draggedShip, setDraggedShip}) => {
                                      templateName="ship3-l"
                                      templates={ship3LRotated}/>
                 </ShipGroup>
-                <ShipGroup allowed={1}>
+                <ShipGroup allowed={allowedCounts[3]}>
                     <ShipWithTooltip key={`allship4-straight`}
                                      draggedShip={draggedShip}
                                      setDraggedShip={setDraggedShip}

@@ -3,6 +3,7 @@ import {BlankBoard, cellSize, gap} from "./Board";
 import {getDimensions, getRandomColor} from "../core/util";
 import {placedShipsToBoard} from "./SetupBoard";
 import hull from "hull.js"
+import Button from "../core/Button";
 
 function svgCoord(c, ct) {
     return (c + ct + 1) * cellSize + ((c + ct + 1) * gap)
@@ -190,7 +191,7 @@ function getComputerShots(ship, placedShots, placedAutoShots) {
     return autoShots;
 }
 
-export function EnemyBoard({usePlacedShots, useEnemyShips, title}) {
+export function EnemyBoard({usePlacedShots, useEnemyShips, title, gameCanStart}) {
     const [placedShots, setPlacedShots] = usePlacedShots;
     const [placedComputerShots, setPlacedComputerShots] = useState([]);
 
@@ -228,6 +229,9 @@ export function EnemyBoard({usePlacedShots, useEnemyShips, title}) {
                              shotSource="computer"/>
                 <BombedShips ships={enemyShips.filter(s => s.hits?.length > 0)}/>
             </BlankBoard>
+            <Button isDisabled={!gameCanStart}>
+                Start shooting
+            </Button>
             <h2 className="u-h2">
                 {title}
             </h2>

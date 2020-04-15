@@ -48,6 +48,7 @@
       width: 100%;
       left: 0;
     }
+
     .ship {
       margin-bottom: $max-width / 22;;
     }
@@ -57,6 +58,10 @@
 .ship-group {
   border-top: 1px solid white;
   padding-top: 12px;
+
+  .ship {
+    cursor: pointer;
+  }
 }
 
 .ship-group {
@@ -68,6 +73,7 @@
   position: relative;
 
   &__label {
+    user-select: none;
     font-size: 16px;
     top: -5px;
     left: 50%;
