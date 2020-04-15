@@ -1,4 +1,4 @@
-import React, {Fragment} from "react";
+import React, {Fragment, useState} from "react";
 import {Ship} from "./Ship";
 import {getDimensions} from "../core/util";
 
@@ -189,12 +189,36 @@ export const allShipPermutationsFlat = (shipTemplates) => {
     return createAllShipPermutations(shipTemplates).flat();
 }
 
-const ShipTemplateRow = React.memo(({templates, setDraggedShip, templateName}) => {
+const ShipWithTooltip = React.memo(({templates, setDraggedShip, templateName}) => {
+    const [show, setShow] = useState(false)
+
     return (
-        <div className="ship-template-row">
-            {templates.map((shipTemplate, i) => <Ship ship={shipTemplate}
-                                                      key={`key-${i}`}
-                                                      setDraggedShip={setDraggedShip}/>)}
+        <div className="ship-with-tooltip">
+            <div onMouseEnter={() => setShow(true)}
+                 onMouseLeave={() => setShow(false)}>
+                <Ship ship={templates[0]}
+                      setDraggedShip={setDraggedShip}/>
+            </div>
+            {
+                templates.length > 1 &&
+                show &&
+                <div className="ship-template-row">
+                    {templates.map((shipTemplate, i) => <Ship ship={shipTemplate}
+                                                              key={`key-${i}`}
+                                                              setDraggedShip={setDraggedShip}/>)}
+                </div>
+            }
+        </div>
+    )
+})
+
+const ShipGroup = React.memo(({size, children}) => {
+    return (
+        <div className="ship-group">
+            <div className="ship-group__label">
+                {size}×
+            </div>
+            {children}
         </div>
     )
 })
@@ -211,56 +235,55 @@ export const ShipSelector = React.memo(({setDraggedShip}) => {
         const ship4StraightRotated = getAllRotations(ship4Straight);
         const ship4LRotated = getAllRotations(ship4L).concat(getAllRotations(ship4LFlipped));
         const ship4TRotated = getAllRotations(ship4T);
-        const ship4ZRotated = getAllRotations(ship4Z).concat(getAllRotations(ship4ZFlipped));;
+        const ship4ZRotated = getAllRotations(ship4Z).concat(getAllRotations(ship4ZFlipped));
 
         return (
             <div className="ship-selector">
-                <div>
-                    <ShipTemplateRow key={`ship1`}
+                <ShipGroup size={4}>
+                    <ShipWithTooltip key={`ship1`}
                                      setDraggedShip={setDraggedShip}
                                      templateName="ship1"
                                      templates={ship1Rotated}/>
-                </div>
-                <div>
-                    <ShipTemplateRow key={`ship2`}
+                </ShipGroup>
+                <ShipGroup size={3}>
+                    <ShipWithTooltip key={`ship2`}
                                      setDraggedShip={setDraggedShip}
                                      templateName="ship2"
                                      templates={ship2Rotated}/>
-                </div>
-                <div>
-                    <ShipTemplateRow key={`allship3-straight`}
+                </ShipGroup>
+                <ShipGroup size={2}>
+                    <ShipWithTooltip key={`allship3-straight`}
                                      setDraggedShip={setDraggedShip}
                                      templateName="ship3-straight"
                                      templates={ship3StraightRotated}/>
 
-                    <ShipTemplateRow key={`allship3-l`}
+                    <ShipWithTooltip key={`allship3-l`}
                                      setDraggedShip={setDraggedShip}
                                      templateName="ship3-l"
                                      templates={ship3LRotated}/>
-                </div>
-                <div>
-                    <ShipTemplateRow key={`allship4-straight`}
+                </ShipGroup>
+                <ShipGroup size={1}>
+                    <ShipWithTooltip key={`allship4-straight`}
                                      setDraggedShip={setDraggedShip}
                                      templateName="ship4-straight"
                                      templates={ship4StraightRotated}/>
-                    <ShipTemplateRow key={`allship4-block`}
+                    <ShipWithTooltip key={`allship4-block`}
                                      setDraggedShip={setDraggedShip}
                                      templateName="ship4-block"
                                      templates={ship4BlockRotated}/>
-                    <ShipTemplateRow key={`allship4-t`}
+                    <ShipWithTooltip key={`allship4-t`}
                                      setDraggedShip={setDraggedShip}
                                      templateName="ship4-t"
                                      templates={ship4TRotated}/>
-                    <ShipTemplateRow key={`allship4-z`}
+                    <ShipWithTooltip key={`allship4-z`}
                                      setDraggedShip={setDraggedShip}
                                      templateName="ship4-z"
                                      templates={ship4ZRotated}/>
-                    <ShipTemplateRow key={`allship4-l`}
+                    <ShipWithTooltip key={`allship4-l`}
                                      setDraggedShip={setDraggedShip}
                                      templateName="ship4-l"
                                      templates={ship4LRotated}/>
-
-                </div>
+                </ShipGroup>
             </div>
         )
 

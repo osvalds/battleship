@@ -5,6 +5,7 @@
   overflow: auto;
   height: 100%;
   flex-wrap: wrap;
+  margin-top: 12px;
 }
 
 .ship-template-row {
@@ -13,4 +14,34 @@
   flex-wrap: wrap;
   margin-bottom: $max-width / 11;
   margin-right: $max-width / 11;
+}
+
+.ship-with-tooltip {
+  margin-right: $max-width / 22;
+
+  &:last-of-type {
+    margin-right: 0;
+  }
+}
+
+.ship-group {
+  border-top: 1px solid white;
+  padding-top: 12px;
+}
+
+.ship-group {
+  display: flex;
+  align-items: flex-start;
+  margin-top: 20px;
+  padding-top: 8px;
+  margin-right: $max-width / 11;
+  position: relative;
+
+  &__label {
+    font-size: 16px;
+    top: -5px;
+    left: 50%;
+    transform: translate(-50%, -100%);
+    position: absolute;
+  }
 }
