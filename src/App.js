@@ -28,7 +28,11 @@ const placeShot = ({x, y}, placedShots, setPlacedShots, placedComputerShots, set
     }
 };
 
-const getRandomValidTarget = (shots, autoShots) => {
+const getRandomValidTarget = (ships, shots, autoShots) => {
+    const shipShots = ships.map(ship => ship.hits)
+        .filter(hit => hit !== undefined)
+        .flat()
+    console.log(shipShots);
     let allPositions = [];
 
     for (let y = 0; y < 10; y++) {
@@ -38,6 +42,7 @@ const getRandomValidTarget = (shots, autoShots) => {
     }
 
     const filteredPos = allPositions
+        .filter(([x, y]) => !alreadyPlaced(x, y, shipShots))
         .filter(([x, y]) => !alreadyPlaced(x, y, shots))
         .filter(([x, y]) => !alreadyPlaced(x, y, autoShots))
 
@@ -45,6 +50,44 @@ const getRandomValidTarget = (shots, autoShots) => {
     return filteredPos[getRandomInt(0, filteredPos.length - 1)]
 };
 
+const findTargets = ({hits}, shots, autoShots) => {
+    let pHits = [];
+
+    const diffs = [[0, -1], [1, 0], [0, 1], [-1, 0]];
+
+    for (let [hx, hy] of hits) {
+        for (let [xd, yd] of diffs) {
+            const ny = hy + yd;
+            const nx = hx + xd;
+            if ((ny > -1 && ny < 10) &&
+                (nx > -1 && nx < 10) &&
+                !alreadyPlaced(nx, ny, shots) &&
+                !alreadyPlaced(nx, ny, hits) &&
+                !alreadyPlaced(nx, ny, autoShots)) {
+                pHits.push([nx, ny])
+            }
+        }
+    }
+    return pHits[getRandomInt(0, pHits.length - 1)]
+}
+
+function GameFinished({playerShips, computerShips, isPlayerTurn}) {
+    if (isPlayerTurn &&
+        computerShips.every(s => s.isSunken)) {
+        return (
+            <h2 className="u-h2">
+                Congrats, you won!
+            </h2>
+        )
+    } else {
+        return (
+            <h2 className="u-h2">
+                Tough luck, the Computer won!
+            </h2>
+        )
+    }
+
+}
 
 function App() {
     const [gameState, setGameState] = useState("SETUP");
@@ -59,30 +102,55 @@ function App() {
     const [computerPlacedAutoShots, setComputerPlacedAutoShots] = useState([])
 
     useEffect(() => {
+        let timer = null;
+        console.log("running")
         // computer's turn to make a move
         if (gameState === "PLAYING" && !isPlayerTurn) {
-            let woundedShip = playerPlacedShips.filter(ship => ship.hits?.length > 0 && !ship.isSunken)
+            timer = setTimeout(() => {
+                let woundedShip = playerPlacedShips.filter(ship => ship.hits?.length > 0 && !ship.isSunken)
 
-            if (woundedShip[0]) {
-                console.log("target wounded");
-            } else {
-                const [x, y] = getRandomValidTarget(computerPlacedShots, computerPlacedAutoShots);
-                placeShot({x, y},
-                    computerPlacedShots, setComputerPlacedShots,
-                    computerPlacedAutoShots, setComputerPlacedAutoShots,
-                    playerPlacedShips, setPlayerPlacedShips,
-                    () => setIsPlayerTurn(true))
-            }
+                if (woundedShip[0]) {
+                    const [x, y] = findTargets(woundedShip[0], computerPlacedShots, computerPlacedAutoShots)
+                    // console.log("target wounded");
+                    // console.log()
+                    placeShot({x, y},
+                        computerPlacedShots, setComputerPlacedShots,
+                        computerPlacedAutoShots, setComputerPlacedAutoShots,
+                        playerPlacedShips, setPlayerPlacedShips,
+                        () => setIsPlayerTurn(true))
+                } else {
+                    const [x, y] = getRandomValidTarget(playerPlacedShips, computerPlacedShots, computerPlacedAutoShots);
+                    placeShot({x, y},
+                        computerPlacedShots, setComputerPlacedShots,
+                        computerPlacedAutoShots, setComputerPlacedAutoShots,
+                        playerPlacedShips, setPlayerPlacedShips,
+                        () => setIsPlayerTurn(true))
+                }
+            }, 400)
+
         }
+        return () => clearTimeout(timer)
     }, [gameState, isPlayerTurn,
         computerPlacedShots, setComputerPlacedShots,
         computerPlacedAutoShots, setComputerPlacedAutoShots,
         playerPlacedShips, setPlayerPlacedShips,
         setIsPlayerTurn])
 
+    useEffect(() => {
+        if (computerPlacedShips.every(ship => ship.isSunken) ||
+            playerPlacedShips.every(ship => ship.isSunken)) {
+            setGameState("FINISHED")
+        }
+    }, [playerPlacedShips, computerPlacedShips, setGameState])
+
     return (
         <div className="App">
             <div className="App__row">
+                {gameState === "FINISHED" &&
+                <GameFinished playerShips={playerPlacedShips}
+                              computerShips={computerPlacedShips}/>
+                }
+
                 {gameState === "SETUP" &&
                 <SetupBoard
                     title="🧗‍ board"
@@ -135,7 +203,6 @@ function App() {
             </div>
         </div>
     )
-
 }
 
 export default App;
