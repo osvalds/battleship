@@ -13,9 +13,11 @@ const rowNames = Array(10).fill().map((_, i) => i + 1);
 const containerWidth = cellSize * boardCols + boardCols;
 const containerHeight = cellSize * boardRows + boardRows;
 
-const BoardShip = React.memo(({x, y, template, cellSize = 10, gap = 1, handleMouseDown, uuid}) => {
+export const BoardShip = React.memo(({x, y, template, cellSize = 10, gap = 1, handleMouseDown, uuid}) => {
     return (
-        <g onMouseDown={() => handleMouseDown(-1, -1)}>
+        <g
+            className="board-ship"
+            onMouseDown={() => handleMouseDown(-1, -1)}>
             {template.map((row, ys) => row.map((cell, xs) => {
                 if (cell) {
                     return (

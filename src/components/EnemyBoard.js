@@ -4,12 +4,13 @@ import {getDimensions, getRandomColor} from "../core/util";
 import {placedShipsToBoard} from "./SetupBoard";
 import hull from "hull.js"
 import Button from "../core/Button";
+import classNames from "classnames";
 
 function svgCoord(c, ct) {
     return (c + ct + 1) * cellSize + ((c + ct + 1) * gap)
 }
 
-function PlacedShots({placedShots, shotSource}) {
+export function PlacedShots({placedShots, shotSource}) {
     if (placedShots) {
         return (
             <g className={`placed-shots placed-shots--${shotSource}`}>
@@ -126,7 +127,7 @@ function ShipHull({ship}) {
     );
 }
 
-function BombedShips({ships}) {
+export function BombedShips({ships}) {
     return ships.map((ship) => {
         const {isSunken, hits, uuid} = ship;
 
@@ -191,12 +192,11 @@ function getComputerShots(ship, placedShots, placedAutoShots) {
     return autoShots;
 }
 
-export function EnemyBoard({usePlacedShots, useEnemyShips, title, gameCanStart}) {
+export function EnemyBoard({usePlacedShots, useEnemyShips, title, gameCanStart, isDisabled, onStartClick, gameState, useAutoShots}) {
     const [placedShots, setPlacedShots] = usePlacedShots;
-    const [placedComputerShots, setPlacedComputerShots] = useState([]);
+    const [placedComputerShots, setPlacedComputerShots] = useAutoShots;
 
     const [enemyShips, setEnemyShips] = useEnemyShips;
-
 
     const onCellClick = ({x, y}) => {
         let newPlaced = [...placedShots];
@@ -218,9 +218,9 @@ export function EnemyBoard({usePlacedShots, useEnemyShips, title, gameCanStart})
         }
     };
 
-
+    const cn = classNames("enemy-board", {"enemy-board--disabled": isDisabled})
     return (
-        <div className="enemy-board">
+        <div className={cn}>
             <BlankBoard handleCellMouseEnter={() => null}
                         onCellClick={onCellClick}>
                 <PlacedShots placedShots={placedShots}
@@ -229,9 +229,13 @@ export function EnemyBoard({usePlacedShots, useEnemyShips, title, gameCanStart})
                              shotSource="computer"/>
                 <BombedShips ships={enemyShips.filter(s => s.hits?.length > 0)}/>
             </BlankBoard>
-            <Button isDisabled={!gameCanStart}>
-                Start shooting
+            {gameState === "SETUP" &&
+            <Button isDisabled={!gameCanStart}
+                    onClick={onStartClick}
+                    cn="button--start">
+                Start pew-pew
             </Button>
+            }
             <h2 className="u-h2">
                 {title}
             </h2>

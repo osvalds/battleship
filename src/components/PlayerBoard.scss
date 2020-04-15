@@ -1,0 +1,12 @@
+.player-board {
+  .board-ship {
+    fill: #fff;
+  }
+
+  .board-hover {
+    cursor: default;
+    &:hover {
+      opacity: 1;
+    }
+  }
+}

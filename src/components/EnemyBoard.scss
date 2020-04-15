@@ -29,5 +29,29 @@
 }
 
 .enemy-board {
+  position: relative;
   grid-area: enemy-board;
+
+  .button--start {
+    position: absolute;
+    top: 40%;
+    left: 10%;
+    //transform: translate(-50%, -50%);
+  }
+
+  &--disabled {
+    .board {
+      position: relative;
+
+      &:before {
+        content: "";
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        background: rgba(34, 40, 49, .5);
+      }
+    }
+  }
 }
