@@ -3,7 +3,7 @@ import Button from "../core/Button";
 import ButtonGroup from "../core/ButtonGroup";
 import {GAME_MODES, GameSettingsContext} from "../core/GameSettings";
 
-export default function Header() {
+export default function Header({gameState}) {
     const [gameSettings, setGameSettings] = useContext(GameSettingsContext);
 
     return (
@@ -14,19 +14,19 @@ export default function Header() {
                 </h1>
                 <ButtonGroup>
                     <Button outlined={true}
+                            isDisabled={gameState==="PLAYING"}
                             onClick={() => setGameSettings(GAME_MODES.simple)}
                             isActive={gameSettings.name === "simple"}>
                         Simple (🇺🇸)
                     </Button>
                     <Button outlined={true}
+                            isDisabled={gameState==="PLAYING"}
                             onClick={() => setGameSettings(GAME_MODES.advanced)}
                             isActive={gameSettings.name === "advanced"}>
                         Advanced (🇱🇻)
                     </Button>
                 </ButtonGroup>
             </div>
-
-
         </header>
     )
 }

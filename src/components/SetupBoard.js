@@ -1,7 +1,8 @@
-import React, {Fragment, useCallback, useEffect, useState} from 'react';
+import React, {Fragment, useCallback, useContext, useEffect, useState} from 'react';
 import {Board} from "./Board";
-import {allShipPermutationsFlat, ShipSelector, shipSize1, shipSize2, shipSize3, shipSize4} from "./ShipSelector";
+import {ShipSelector} from "./ShipSelector";
 import {getDimensions, getRandomInt, uuidv4} from "../core/util";
+import {GameSettingsContext} from "../core/GameSettings";
 
 const centerOffset = (template) => {
     const {rows, cols} = getDimensions(template);
@@ -89,14 +90,16 @@ const getAllValidPositions = (board, template) => {
     return positions;
 };
 
-export const getRandomShipPlacement = () => {
+export const getRandomShipPlacement = (shipConfig) => {
     let board = new Array(10).fill().map(() => new Array(10).fill(""))
 
-    const allShip1 = allShipPermutationsFlat(shipSize1);
-    const allShip2 = allShipPermutationsFlat(shipSize2);
-    const allShip3 = allShipPermutationsFlat(shipSize3);
-    const allShip4 = allShipPermutationsFlat(shipSize4);
-    const allTemplates = [allShip1, allShip2, allShip3, allShip4];
+    // flattens the ship config array to be consumed by the random placement algorithm
+    const allTemplates = shipConfig.map((arr) => {
+        return [arr.map(f => {
+            return f.t
+        }).flat()]
+    }).flat()
+
     const chosenTemplates = [];
     const placedShips = [];
 
@@ -132,7 +135,7 @@ export const getRandomShipPlacement = () => {
             // in case there are no available places where to put stuff,
             // just call the function again. I tried this fn ~50k times,
             // and it was never called again so this is just a precaution
-            getRandomShipPlacement();
+            getRandomShipPlacement(shipConfig);
         }
 
     }
@@ -161,6 +164,7 @@ export function SetupBoard({usePlacedShips, title}) {
     const [draggedShip, setDraggedShip] = useState(null);
     const [draggingPosition, setDraggingPosition] = useState({x: 0, y: 0});
     const [hoveredCell, setHoveredCell] = useState({x: -1, y: -1});
+    const [gameSettings] = useContext(GameSettingsContext)
 
     const handleCellMouseEnter = useCallback(({x, y}) => {
         setHoveredCell({x, y});
@@ -238,7 +242,7 @@ export function SetupBoard({usePlacedShips, title}) {
     }, [placedShips, setPlacedShips, setDraggedShip]);
 
     const fillBoardWithRandom = () => {
-        setPlacedShips(getRandomShipPlacement());
+        setPlacedShips(getRandomShipPlacement(gameSettings.shipConfig));
     };
 
     const resetBoard = () => {

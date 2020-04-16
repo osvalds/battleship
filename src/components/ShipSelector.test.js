@@ -1,4 +1,4 @@
-import {createAllShipPermutations, rotateTemplate90deg} from "./ShipSelector";
+import {rotateTemplate90deg} from "./ShipSelector";
 
 
 it("returns ship template rotated 90deg", () => {
@@ -46,57 +46,4 @@ it("returns ship template rotated 90deg", () => {
     expect(rotateTemplate90deg(zTmeplate3x2)).toStrictEqual(zTmeplate2x3);
     expect(rotateTemplate90deg(zTmeplate2x3)).toStrictEqual(zTmeplate3x2);
 });
-
-it("returns all permutations of possible ships", () => {
-    const shipSize3 = [
-        {
-            mutations: 1,
-            template: [
-                [1],
-                [1],
-                [1]
-            ]
-        },
-        {
-            mutations: 3,
-            template: [
-                [1, 1],
-                [1, 0]
-            ]
-        },
-    ];
-
-    const shipSize3Permutations = [
-        [
-            [
-                [1],
-                [1],
-                [1]
-            ],
-            [
-                [1, 1, 1]
-            ]
-        ],
-        [
-            [
-                [1, 1],
-                [1, 0]
-            ],
-            [
-                [1, 0],
-                [1, 1]
-            ],
-            [
-                [0, 1],
-                [1, 1]
-            ],
-            [
-                [1, 1],
-                [0, 1]
-            ]
-        ]
-    ];
-
-    expect(createAllShipPermutations(shipSize3)).toStrictEqual(shipSize3Permutations);
-
-});
+;

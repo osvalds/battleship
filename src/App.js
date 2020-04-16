@@ -93,15 +93,20 @@ function App() {
     const [gameState, setGameState] = useState("SETUP");
     const [isPlayerTurn, setIsPlayerTurn] = useState(true);
 
-    const [playerPlacedShips, setPlayerPlacedShips] = useState(getRandomShipPlacement());
+    const [gameSettings, setGameSettings] = useState(GAME_MODES.advanced);
+
+    const [playerPlacedShips, setPlayerPlacedShips] = useState(getRandomShipPlacement(gameSettings.shipConfig));
     const [playerPlacedShots, setPlayerPlacedShots] = useState([])
     const [playerPlacedAutoShots, setPlayerPlacedAutoShots] = useState([])
 
-    const [computerPlacedShips, setComputerPlacedShips] = useState(getRandomShipPlacement());
+    const [computerPlacedShips, setComputerPlacedShips] = useState(getRandomShipPlacement(gameSettings.shipConfig));
     const [computerPlacedShots, setComputerPlacedShots] = useState([])
     const [computerPlacedAutoShots, setComputerPlacedAutoShots] = useState([])
 
-    const useGameSettings = useState(GAME_MODES.advanced)
+    useEffect(() => {
+        setPlayerPlacedShips(getRandomShipPlacement(gameSettings.shipConfig))
+        setComputerPlacedShips(getRandomShipPlacement(gameSettings.shipConfig))
+    }, [gameSettings, setPlayerPlacedShips, setComputerPlacedShips])
 
     useEffect(() => {
         let timer = null;
@@ -145,9 +150,9 @@ function App() {
     }, [playerPlacedShips, computerPlacedShips, setGameState])
 
     return (
-        <GameSettingsContext.Provider value={useGameSettings}>
+        <GameSettingsContext.Provider value={[gameSettings, setGameSettings]}>
             <div className="App">
-                <Header/>
+                <Header gameState={gameState}/>
                 <div className="App__row">
                     {gameState === "FINISHED" &&
                     <GameFinished playerShips={playerPlacedShips}

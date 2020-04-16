@@ -2,88 +2,7 @@ import React, {useCallback, useContext, useState} from "react";
 import {Ship} from "./Ship";
 import {getDimensions} from "../core/util";
 import classNames from "classnames"
-import {GameSettingsContext, getAllRotations} from "../core/GameSettings";
-
-export const shipSize1 = [
-    {
-        mutations: 0,
-        template: [[1]]
-    }
-];
-
-export const shipSize2 = [
-    {
-        mutations: 1,
-        template: [[1, 1]]
-    },
-];
-
-export const shipSize3 = [
-    {
-        mutations: 1,
-        template: [
-            [1, 1, 1]
-        ]
-    },
-    {
-        mutations: 3,
-        template: [
-            [1, 1],
-            [1, 0]
-        ]
-    },
-];
-
-export const shipSize4 = [
-    {
-        mutations: 0,
-        template: [
-            [1, 1],
-            [1, 1],
-        ]
-    },
-    {
-        mutations: 1,
-        template: [[1, 1, 1, 1]]
-    },
-    {
-        mutations: 3,
-        template: [
-            [1, 1, 1],
-            [1, 0, 0]
-        ]
-    },
-    {
-        mutations: 3,
-        template: [
-            [1, 0, 0],
-            [1, 1, 1]
-        ]
-    },
-    {
-        mutations: 3,
-        template: [
-            [0, 1, 0],
-            [1, 1, 1]
-        ]
-    },
-    {
-        mutations: 1,
-        template: [
-            [1, 1, 0],
-            [0, 1, 1]
-        ]
-    },
-    {
-        mutations: 1,
-        template: [
-            [0, 1, 1],
-            [1, 1, 0]
-        ]
-    }
-];
-
-
+import {GameSettingsContext} from "../core/GameSettings";
 
 export const rotateTemplate90deg = (template) => {
     const {rows, cols} = getDimensions(template);
@@ -98,14 +17,6 @@ export const rotateTemplate90deg = (template) => {
 
     return rotatedTemplate;
 };
-
-export const createAllShipPermutations = (shipTemplates) => {
-    return shipTemplates.map(getAllRotations)
-};
-
-export const allShipPermutationsFlat = (shipTemplates) => {
-    return createAllShipPermutations(shipTemplates).flat();
-}
 
 const ShipWithTooltip = React.memo(({templates, setDraggedShip, draggedShip, w}) => {
     const [show, setShow] = useState(false)
