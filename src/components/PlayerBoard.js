@@ -6,10 +6,10 @@ import {PlacedShots, BombedShips} from "./EnemyBoard"
 
 
 export function PlayerBoard({useTakenShots, useTakenAutoShots, usePlacedShips, title, isDisabled, gameState}) {
-    const [takenShots, bar] = useTakenShots;
-    const [takenAutoShots, foo] = useTakenAutoShots;
+    const [takenShots] = useTakenShots;
+    const [takenAutoShots] = useTakenAutoShots;
 
-    const [enemyShips, baz] = usePlacedShips;
+    const [enemyShips] = usePlacedShips;
 
     const cn = classNames("player-board", {"player-board--disabled": isDisabled})
     return (

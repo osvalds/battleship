@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {getRandomShipPlacement, isValidShipCount, placedShipsToBoard, SetupBoard} from "./components/SetupBoard";
 import './App.scss';
 import {addHit, alreadyPlaced, EnemyBoard, getComputerShots, isSunken} from "./components/EnemyBoard";
@@ -6,6 +6,7 @@ import {PlayerBoard} from "./components/PlayerBoard";
 import {getRandomInt} from "./core/util"
 import Header from "./components/Header";
 import {GAME_MODES, GameSettingsContext} from "./core/GameSettings";
+import GameFinished from "./components/GameFinished";
 
 const placeShot = ({x, y}, placedShots, setPlacedShots, placedComputerShots, setPlacedComputerShots, enemyShips, setEnemyShips, onMissedShot) => {
     let newPlaced = [...placedShots];
@@ -55,7 +56,7 @@ const getDiffArray = (mode, hits, shots) => {
         return [[0, -1], [1, 0], [0, 1], [-1, 0]]
     } else {
         const direction = hits[0][0] === hits[1][0] ? "vertical" : "horizontal";
-        console.log("direction:", direction);
+
         if (direction === "horizontal") {
             return [[1, 0], [-1, 0]];
         } else {
@@ -85,23 +86,6 @@ const chooseTarget = (modeName, {hits}, shots, autoShots) => {
     return pHits[getRandomInt(0, pHits.length - 1)]
 }
 
-function GameFinished({playerShips, computerShips, isPlayerTurn}) {
-    if (isPlayerTurn &&
-        computerShips.every(s => s.isSunken)) {
-        return (
-            <h2 className="u-h2">
-                Congrats, you won!
-            </h2>
-        )
-    } else {
-        return (
-            <h2 className="u-h2">
-                Tough luck, the Computer won!
-            </h2>
-        )
-    }
-
-}
 
 function App() {
     const [gameState, setGameState] = useState("SETUP");
@@ -120,7 +104,22 @@ function App() {
     useEffect(() => {
         setPlayerPlacedShips(getRandomShipPlacement(gameSettings.shipConfig))
         setComputerPlacedShips(getRandomShipPlacement(gameSettings.shipConfig))
-    }, [gameSettings, setPlayerPlacedShips, setComputerPlacedShips])
+        setPlayerPlacedShots([])
+        setPlayerPlacedAutoShots([])
+        setComputerPlacedShots([])
+        setComputerPlacedAutoShots([])
+        setGameState("SETUP")
+    }, [gameSettings, setPlayerPlacedShips, setComputerPlacedShips, setPlayerPlacedShots, setPlayerPlacedAutoShots, setComputerPlacedShots, setComputerPlacedAutoShots, setGameState])
+
+    const resetGame = useCallback(() => {
+        setPlayerPlacedShips(getRandomShipPlacement(gameSettings.shipConfig))
+        setComputerPlacedShips(getRandomShipPlacement(gameSettings.shipConfig))
+        setPlayerPlacedShots([])
+        setPlayerPlacedAutoShots([])
+        setComputerPlacedShots([])
+        setComputerPlacedAutoShots([])
+        setGameState("SETUP")
+    }, [gameSettings, setPlayerPlacedShips, setComputerPlacedShips, setPlayerPlacedShots, setPlayerPlacedAutoShots, setComputerPlacedShots, setComputerPlacedAutoShots, setGameState])
 
     useEffect(() => {
         let timer = null;
@@ -167,28 +166,28 @@ function App() {
         <GameSettingsContext.Provider value={[gameSettings, setGameSettings]}>
             <div className="App">
                 <Header gameState={gameState}/>
+                {gameState === "FINISHED" &&
+                <GameFinished computerShips={computerPlacedShips}
+                              isPlayerTurn={isPlayerTurn}
+                              restartGame={resetGame}/>
+                }
                 <div className="App__row">
-                    {gameState === "FINISHED" &&
-                    <GameFinished playerShips={playerPlacedShips}
-                                  isPlayerTurn={isPlayerTurn}
-                                  computerShips={computerPlacedShips}/>
-                    }
-
                     {gameState === "SETUP" &&
                     <SetupBoard
                         title="🧗‍ board"
                         usePlacedShips={[playerPlacedShips, setPlayerPlacedShips]}/>
                     }
-                    {gameState === "PLAYING" &&
+                    {gameState !== "SETUP" &&
                     <PlayerBoard
                         title="🧗‍ board"
+                        isDisabled={gameState !== "PLAYING"}
                         usePlacedShips={[playerPlacedShips, setPlayerPlacedShips]}
                         useTakenShots={[computerPlacedShots, setComputerPlacedShots]}
                         useTakenAutoShots={[computerPlacedAutoShots, computerPlacedAutoShots]}
                     />
                     }
                     <EnemyBoard
-                        title="🤖's board (enemy)"
+                        title="🤖's board"
                         gameCanStart={isValidShipCount(playerPlacedShips)}
                         onMissedShot={() => setIsPlayerTurn(false)}
                         gameState={gameState}
