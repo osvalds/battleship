@@ -1,14 +1,14 @@
-import React, {useCallback, useEffect, useMemo, useRef, useState} from "react";
+import React, {useCallback, useContext, useEffect, useMemo, useRef, useState} from "react";
 import {getRandomColor} from "../core/util";
 import {Ship} from "./Ship";
+import {GameSettingsContext} from "../App";
 
 export const cellSize = 10;
 export const gap = 1;
 const boardCols = 11; // 10 cols + 1 for number
 const boardRows = 11; // 10 rows + 1 for letter
 
-const colNames = [..."KARTUPELIS"];
-const rowNames = Array(10).fill().map((_, i) => i + 1);
+const rowNames = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
 const containerWidth = cellSize * boardCols + boardCols;
 const containerHeight = cellSize * boardRows + boardRows;
@@ -149,6 +149,9 @@ const BlankPlaceholders = React.memo(({cols, rows, handleMouseEnter, className, 
 })
 
 export function Board({placedShips, draggingPosition, handleCellMouseEnter, draggedShip, handlePlacedShipDragging}) {
+    const [gameSettings] = useContext(GameSettingsContext)
+    const colNames = [...gameSettings.cols];
+
     return (
         <div className="board">
             {draggedShip && draggedShip.isDragging &&
@@ -214,6 +217,9 @@ export function BlankBoard({
                                handleCellMouseEnter,
                                children
                            }) {
+    const [gameSettings] = useContext(GameSettingsContext)
+    const colNames = [...gameSettings.cols];
+
     return (
         <div className="board">
             <svg viewBox={`0 0 ${containerWidth} ${containerHeight}`}
