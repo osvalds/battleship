@@ -50,10 +50,25 @@ const getRandomValidTarget = (ships, shots, autoShots) => {
     return filteredPos[getRandomInt(0, filteredPos.length - 1)]
 };
 
-const findTargets = ({hits}, shots, autoShots) => {
+const getDiffArray = (mode, hits, shots) => {
+    if (mode === "advanced" || hits.length === 1) {
+        return [[0, -1], [1, 0], [0, 1], [-1, 0]]
+    } else {
+        const direction = hits[0][0] === hits[1][0] ? "vertical" : "horizontal";
+        console.log("direction:", direction);
+        if (direction === "horizontal") {
+            return [[1, 0], [-1, 0]];
+        } else {
+            return [[0, 1], [0, -1]];
+        }
+    }
+}
+
+const chooseTarget = (modeName, {hits}, shots, autoShots) => {
+    const shotsCombined = shots.concat(autoShots);
     let pHits = [];
 
-    const diffs = [[0, -1], [1, 0], [0, 1], [-1, 0]];
+    const diffs = getDiffArray(modeName, hits, shotsCombined);
 
     for (let [hx, hy] of hits) {
         for (let [xd, yd] of diffs) {
@@ -61,9 +76,8 @@ const findTargets = ({hits}, shots, autoShots) => {
             const nx = hx + xd;
             if ((ny > -1 && ny < 10) &&
                 (nx > -1 && nx < 10) &&
-                !alreadyPlaced(nx, ny, shots) &&
-                !alreadyPlaced(nx, ny, hits) &&
-                !alreadyPlaced(nx, ny, autoShots)) {
+                !alreadyPlaced(nx, ny, shotsCombined) &&
+                !alreadyPlaced(nx, ny, hits)) {
                 pHits.push([nx, ny])
             }
         }
@@ -116,7 +130,7 @@ function App() {
                 let woundedShip = playerPlacedShips.filter(ship => ship.hits?.length > 0 && !ship.isSunken)
 
                 if (woundedShip[0]) {
-                    const [x, y] = findTargets(woundedShip[0], computerPlacedShots, computerPlacedAutoShots)
+                    const [x, y] = chooseTarget(gameSettings.name, woundedShip[0], computerPlacedShots, computerPlacedAutoShots)
                     // console.log("target wounded");
                     // console.log()
                     placeShot({x, y},
