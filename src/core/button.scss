@@ -52,8 +52,15 @@
     display: none;
   }
 
-  .shift {
-    font-family: sans-serif;
+  &--outlined {
+    background-color: transparent;
+    border: 1px solid #fff;
+
+    &:hover, &:focus, &:active, &.button--active {
+      box-shadow: rgba(255, 255, 255, 0.7) 0px 0px 15px, rgba(255, 255, 255, 0.6) 0px 0px 3px 1px;
+      background-color: transparent;
+      cursor: pointer;
+    }
   }
 
   @media only screen and (min-width: 1000px) {

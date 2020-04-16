@@ -4,6 +4,7 @@ import './App.scss';
 import {addHit, alreadyPlaced, EnemyBoard, getComputerShots, isSunken} from "./components/EnemyBoard";
 import {PlayerBoard} from "./components/PlayerBoard";
 import {getRandomInt} from "./core/util"
+import Header from "./components/Header";
 
 const placeShot = ({x, y}, placedShots, setPlacedShots, placedComputerShots, setPlacedComputerShots, enemyShips, setEnemyShips, onMissedShot) => {
     let newPlaced = [...placedShots];
@@ -142,6 +143,7 @@ function App() {
 
     return (
         <div className="App">
+            <Header/>
             <div className="App__row">
                 {gameState === "FINISHED" &&
                 <GameFinished playerShips={playerPlacedShips}
@@ -174,31 +176,31 @@ function App() {
                     useAutoShots={[playerPlacedAutoShots, setPlayerPlacedAutoShots]}
                 />
             </div>
-            <div className="App__row">
-                {gameState === "SETUP" &&
-                <SetupBoard
-                    title="🤖's board"
-                    usePlacedShips={[computerPlacedShips, setComputerPlacedShips]}/>
-                }
-                {gameState === "PLAYING" &&
-                <PlayerBoard
-                    title="🧗‍ board"
-                    usePlacedShips={[computerPlacedShips]}
-                    useTakenShots={[playerPlacedShots]}
-                    useTakenAutoShots={[playerPlacedAutoShots]}
-                />
-                }
-                <EnemyBoard
-                    title="🧗‍ board (enemy)"
-                    gameState={gameState}
-                    gameCanStart={isValidShipCount(playerPlacedShips)}
-                    onStartClick={() => setGameState("PLAYING")}
-                    onMissedShot={() => setIsPlayerTurn(true)}
-                    isDisabled={gameState !== "PLAYING" || isPlayerTurn}
-                    useEnemyShips={[playerPlacedShips, setPlayerPlacedShips]}
-                    usePlacedShots={[computerPlacedShots, setComputerPlacedShots]}
-                    useAutoShots={[computerPlacedAutoShots, setComputerPlacedAutoShots]}/>
-            </div>
+            {/*<div className="App__row">*/}
+            {/*    {gameState === "SETUP" &&*/}
+            {/*    <SetupBoard*/}
+            {/*        title="🤖's board"*/}
+            {/*        usePlacedShips={[computerPlacedShips, setComputerPlacedShips]}/>*/}
+            {/*    }*/}
+            {/*    {gameState === "PLAYING" &&*/}
+            {/*    <PlayerBoard*/}
+            {/*        title="🧗‍ board"*/}
+            {/*        usePlacedShips={[computerPlacedShips]}*/}
+            {/*        useTakenShots={[playerPlacedShots]}*/}
+            {/*        useTakenAutoShots={[playerPlacedAutoShots]}*/}
+            {/*    />*/}
+            {/*    }*/}
+            {/*    <EnemyBoard*/}
+            {/*        title="🧗‍ board (enemy)"*/}
+            {/*        gameState={gameState}*/}
+            {/*        gameCanStart={isValidShipCount(playerPlacedShips)}*/}
+            {/*        onStartClick={() => setGameState("PLAYING")}*/}
+            {/*        onMissedShot={() => setIsPlayerTurn(true)}*/}
+            {/*        isDisabled={gameState !== "PLAYING" || isPlayerTurn}*/}
+            {/*        useEnemyShips={[playerPlacedShips, setPlayerPlacedShips]}*/}
+            {/*        usePlacedShots={[computerPlacedShots, setComputerPlacedShots]}*/}
+            {/*        useAutoShots={[computerPlacedAutoShots, setComputerPlacedAutoShots]}/>*/}
+            {/*</div>*/}
         </div>
     )
 }

@@ -72,7 +72,9 @@ html, body, #root, .App {
   flex-direction: column;
 
   &__row {
-    margin: 24px 24px;
+    margin: 24px auto;
+    width: 100%;
+    max-width: 1200px;
     display: grid;
     grid-template-areas:  "player-board enemy-board"
                           "ship-selector ship-selector";
