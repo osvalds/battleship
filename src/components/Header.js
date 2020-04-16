@@ -1,7 +1,7 @@
 import React, {useContext} from "react";
 import Button from "../core/Button";
 import ButtonGroup from "../core/ButtonGroup";
-import {GAME_MODES, GameSettingsContext} from "../App";
+import {GAME_MODES, GameSettingsContext} from "../core/GameSettings";
 
 export default function Header() {
     const [gameSettings, setGameSettings] = useContext(GameSettingsContext);

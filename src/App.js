@@ -1,10 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {getRandomShipPlacement, SetupBoard, isValidShipCount, placedShipsToBoard} from "./components/SetupBoard";
+import {getRandomShipPlacement, isValidShipCount, placedShipsToBoard, SetupBoard} from "./components/SetupBoard";
 import './App.scss';
 import {addHit, alreadyPlaced, EnemyBoard, getComputerShots, isSunken} from "./components/EnemyBoard";
 import {PlayerBoard} from "./components/PlayerBoard";
 import {getRandomInt} from "./core/util"
 import Header from "./components/Header";
+import {GAME_MODES, GameSettingsContext} from "./core/GameSettings";
 
 const placeShot = ({x, y}, placedShots, setPlacedShots, placedComputerShots, setPlacedComputerShots, enemyShips, setEnemyShips, onMissedShot) => {
     let newPlaced = [...placedShots];
@@ -87,21 +88,6 @@ function GameFinished({playerShips, computerShips, isPlayerTurn}) {
     }
 
 }
-
-export const GAME_MODES = {
-    simple: {
-        name: "simple",
-        cols: "ABCDEFGHIJ"
-    },
-    advanced: {
-        name: "advanced",
-        cols: "KARTUPELIS"
-    }
-}
-
-export const GameSettingsContext = React.createContext(
-    GAME_MODES.advanced
-)
 
 function App() {
     const [gameState, setGameState] = useState("SETUP");

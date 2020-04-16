@@ -1,7 +1,7 @@
 import React, {useCallback, useContext, useEffect, useMemo, useRef, useState} from "react";
 import {getRandomColor} from "../core/util";
 import {Ship} from "./Ship";
-import {GameSettingsContext} from "../App";
+import {GameSettingsContext} from "../core/GameSettings";
 
 export const cellSize = 10;
 export const gap = 1;
