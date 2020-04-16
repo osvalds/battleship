@@ -1,8 +1,11 @@
-import React from "react";
+import React, {useContext} from "react";
 import Button from "../core/Button";
 import ButtonGroup from "../core/ButtonGroup";
+import {GAME_MODES, GameSettingsContext} from "../App";
 
 export default function Header() {
+    const [gameSettings, setGameSettings] = useContext(GameSettingsContext);
+
     return (
         <header className="header">
             <div className="header__content">
@@ -10,10 +13,14 @@ export default function Header() {
                     🥔.🥔.🥔.🥔.🥔.🥔.🥔.🥔.🥔.🥔.
                 </h1>
                 <ButtonGroup>
-                    <Button outlined={true}>
+                    <Button outlined={true}
+                            onClick={() => setGameSettings(GAME_MODES.simple)}
+                            isActive={gameSettings.name === "simple"}>
                         Simple (🇺🇸)
                     </Button>
-                    <Button outlined={true}>
+                    <Button outlined={true}
+                            onClick={() => setGameSettings(GAME_MODES.advanced)}
+                            isActive={gameSettings.name === "advanced"}>
                         Advanced (🇱🇻)
                     </Button>
                 </ButtonGroup>

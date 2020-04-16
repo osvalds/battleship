@@ -176,6 +176,7 @@ export function Board({placedShips, draggingPosition, handleCellMouseEnter, drag
                     pointerEvents: "none",
                     fill: "white",
                 } : {
+                    cursor: "pointer",
                     fill: "white",
                 }}>
                     {
