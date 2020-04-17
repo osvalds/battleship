@@ -4,4 +4,8 @@
 
 .setup-wrapper {
   grid-area: player-board;
+
+  @media only screen and (min-width: 768px) {
+    padding-right: 130px;
+  }
 }

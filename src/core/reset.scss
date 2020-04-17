@@ -74,23 +74,6 @@ html, body, #root, .App {
   overflow: hidden;
 }
 
-.App {
-  overflow: auto;
-  display: flex;
-  flex-direction: column;
-
-  &__row {
-    margin: 24px auto;
-    width: 100%;
-    max-width: 1200px;
-    display: grid;
-    grid-template-areas: "player-board enemy-board" "ship-selector ship-selector";
-    grid-template-columns: repeat(2, minmax(400px, 1fr));
-    grid-template-rows: -webkit-max-content;
-
-  }
-}
-
 .u-h2 {
   user-select: none;
   font-size: 20px;

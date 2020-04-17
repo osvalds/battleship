@@ -1,10 +1,13 @@
 .player-board {
+  text-align: center;
+
   .board-ship {
     fill: #fff;
   }
 
   .board-hover {
     cursor: default;
+
     &:hover {
       opacity: 1;
     }
@@ -23,6 +26,13 @@
         position: absolute;
         background: rgba(34, 40, 49, .5);
       }
+    }
+  }
+
+  @media only screen and (min-width: 768px) {
+    padding-right: 130px;
+    .u-h2 {
+      text-align: left;
     }
   }
 }

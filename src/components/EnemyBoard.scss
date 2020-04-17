@@ -30,6 +30,7 @@
 
 .enemy-board {
   grid-area: enemy-board;
+  text-align: center;
 
   .board-ship {
     fill: #fff;
@@ -39,8 +40,13 @@
     position: relative;
     display: flex;
     align-items: center;
+
+
     .targets {
-      margin-left: 20px;
+      position: absolute;
+      top: 50%;
+      right: 0;
+      transform: translateY(-50%);
     }
   }
 
@@ -66,9 +72,18 @@
       }
     }
   }
+
+  @media only screen and (min-width: 768px) {
+    text-align: left;
+    &__row {
+      padding-right: 130px;
+    }
+  }
 }
 
 .targets {
+  display: none;
+
   &--faded {
     opacity: .6;
   }
@@ -76,5 +91,9 @@
   &__row {
     margin-bottom: $max-width/ 44;
     display: flex;
+  }
+
+  @media only screen and (min-width: 768px) {
+    display: block;
   }
 }

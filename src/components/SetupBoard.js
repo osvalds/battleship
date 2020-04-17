@@ -316,7 +316,7 @@ export function SetupBoard({usePlacedShips, title}) {
                     Random layout
                 </button>
                 <button
-                    className="button"
+                    className="button button--desktop"
                     onClick={resetBoard}>
                     Reset layout
                 </button>
