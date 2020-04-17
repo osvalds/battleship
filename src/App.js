@@ -149,7 +149,7 @@ function App() {
 
         }
         return () => clearTimeout(timer)
-    }, [gameState, isPlayerTurn,
+    }, [gameState, gameSettings.name, isPlayerTurn,
         computerPlacedShots, setComputerPlacedShots,
         computerPlacedAutoShots, setComputerPlacedAutoShots,
         playerPlacedShips, setPlayerPlacedShips,

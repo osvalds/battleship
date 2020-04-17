@@ -1,5 +1,4 @@
-import React, {useCallback, useContext, useEffect, useMemo, useRef, useState} from "react";
-import {getRandomColor} from "../core/util";
+import React, {useContext} from "react";
 import {Ship} from "./Ship";
 import {GameSettingsContext} from "../core/GameSettings";
 
@@ -133,7 +132,7 @@ const BlankPlaceholders = React.memo(({cols, rows, handleMouseEnter, className, 
                 return rows.map((num, y) => {
                     return (<rect key={`${letter}:${num}`}
                                   className={className}
-                                  stroke={getRandomColor()}
+                                  stroke="transparent"
                                   fill="#109DAC"
                                   x={(x + 1) * cellSize + ((x + 1) * gap)}
                                   y={(y + 1) * cellSize + ((y + 1) * gap)}

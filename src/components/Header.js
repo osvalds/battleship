@@ -10,20 +10,20 @@ export default function Header({gameState}) {
         <header className="header">
             <div className="header__content">
                 <h1 className="header__logo">
-                    🥔.🥔.🥔.🥔.🥔.🥔.🥔.🥔.🥔.🥔.
+                    <span role="img" aria-label="logo">🚢</span> × <span role="img" aria-label="logo">💣</span>
                 </h1>
                 <ButtonGroup>
                     <Button outlined={true}
-                            isDisabled={gameState==="PLAYING"}
+                            isDisabled={gameState === "PLAYING"}
                             onClick={() => setGameSettings(GAME_MODES.simple)}
                             isActive={gameSettings.name === "simple"}>
-                        Simple (🇺🇸)
+                        Simple (<span role="img" aria-label="flag">🇺🇸</span>)
                     </Button>
                     <Button outlined={true}
-                            isDisabled={gameState==="PLAYING"}
+                            isDisabled={gameState === "PLAYING"}
                             onClick={() => setGameSettings(GAME_MODES.advanced)}
                             isActive={gameSettings.name === "advanced"}>
-                        Advanced (🇱🇻)
+                        Advanced (<span role="img" aria-label="flag">🇱🇻</span>)
                     </Button>
                 </ButtonGroup>
             </div>

@@ -7,7 +7,8 @@ export default function GameFinished({computerShips, isPlayerTurn, restartGame})
         return (
             <div className="game-finished">
                 <h2 className="u-h2">
-                    Congrats, you beat the computer! 🎉
+                    Congrats, you beat the computer!
+                    <span role="img" aria-label="confetti">🎉</span>
                 </h2>
                 <Button onClick={restartGame}>
                     Dominate again!

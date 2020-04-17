@@ -1,5 +1,4 @@
-import React, {useCallback, useState} from "react";
-import {getRandomColor, uuidv4} from "../core/util";
+import React, {useCallback} from "react";
 
 const ShipContent = React.memo(({ship, setDraggedShip, cellSize = 10, gap = 1}) => {
     const rows = ship.length;
@@ -25,7 +24,7 @@ const ShipContent = React.memo(({ship, setDraggedShip, cellSize = 10, gap = 1}) 
                             <rect
                                 key={`${x}:${y}`}
                                 fill="white"
-                                stroke={getRandomColor()}
+                                stroke="transparent"
                                 x={(x) * cellSize + ((x) * gap)}
                                 y={(y) * cellSize + ((y) * gap)}
                                 width={cellSize}

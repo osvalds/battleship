@@ -1,6 +1,6 @@
-import React, {Fragment, useState} from "react";
+import React from "react";
 import {BlankBoard, cellSize, gap} from "./Board";
-import {getDimensions, getRandomColor} from "../core/util";
+import {getDimensions} from "../core/util";
 import {placedShipsToBoard} from "./SetupBoard";
 import hull from "hull.js"
 import Button from "../core/Button";

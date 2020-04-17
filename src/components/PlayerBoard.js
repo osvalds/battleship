@@ -1,5 +1,4 @@
-import React, {useState} from "react";
-import {placedShipsToBoard} from "./SetupBoard";
+import React from "react";
 import classNames from "classnames";
 import {BlankBoard, BoardShip} from "./Board";
 import {PlacedShots, BombedShips} from "./EnemyBoard"

@@ -250,6 +250,7 @@ export function SetupBoard({usePlacedShips, title}) {
     };
 
     // for internal board algorithm testing
+    // eslint-disable-next-line no-unused-vars
     const tryLots = () => {
         let results = [];
         for (let i = 0; i < 10000; i++) {
