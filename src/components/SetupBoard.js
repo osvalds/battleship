@@ -186,6 +186,7 @@ export function SetupBoard({usePlacedShips, title, gameState}) {
     const handleDraggedShipSnapping = useCallback(() => {
 
         const isSnapping = hoveredCell.x > -1 && hoveredCell.y > -1;
+
         const x = hoveredCell.x - draggedShip.offset.x;
         const y = hoveredCell.y - draggedShip.offset.y;
 

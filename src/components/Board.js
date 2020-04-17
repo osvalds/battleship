@@ -130,17 +130,19 @@ const BlankPlaceholders = React.memo(({cols, rows, handleMouseEnter, className, 
         <g className="blank-placeholders">
             {cols.map((letter, x) => {
                 return rows.map((num, y) => {
-                    return (<rect key={`${letter}:${num}`}
-                                  className={className}
-                                  stroke="transparent"
-                                  fill="#109DAC"
-                                  x={(x + 1) * cellSize + ((x + 1) * gap)}
-                                  y={(y + 1) * cellSize + ((y + 1) * gap)}
-                                  width={cellSize}
-                                  height={cellSize}
-                                  onClick={() => handleClick({x, y})}
-                                  onMouseEnter={() => handleMouseEnter({x, y})}
-                    />)
+                    return (
+                        <rect key={`${letter}:${num}`}
+                              className={className}
+                              stroke="transparent"
+                              fill="#109DAC"
+                              x={(x + 1) * cellSize + ((x + 1) * gap)}
+                              y={(y + 1) * cellSize + ((y + 1) * gap)}
+                              width={cellSize}
+                              height={cellSize}
+                              onClick={() => handleClick({x, y})}
+                              onMouseEnter={() => handleMouseEnter({x, y})}
+                        />
+                    )
                 })
             })}
         </g>
@@ -185,7 +187,10 @@ export function Board({placedShips, draggingPosition, handleCellMouseEnter, drag
                         placedShips.map(ship => <BoardShip template={ship.template}
                                                            uuid={ship.uuid}
                                                            key={ship.uuid}
-                                                           handleMouseDown={(x, y) => handlePlacedShipDragging(ship, x, y)}
+                                                           handleMouseDown={(x, y) => {
+                                                               handleCellMouseEnter({x: ship.x + x, y: ship.y + y})
+                                                               handlePlacedShipDragging(ship, x, y)
+                                                           }}
                                                            x={ship.x}
                                                            y={ship.y}/>)
                     }
