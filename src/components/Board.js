@@ -113,7 +113,7 @@ const NumberRow = React.memo(({numbers, handleMouseEnter}) => {
                               y={(index + 2) * cellSize + (index * gap)}
                               textLength={cellSize}
                               fill="white"
-                              transform="translate(0,-2)"
+                              transform={`translate(${num === 10 ? 0 : 4},-2)`}
                               onMouseEnter={handleMouseEnter}
                               style={{fontSize: "9"}}>
                             {num}

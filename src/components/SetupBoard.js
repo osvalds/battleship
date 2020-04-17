@@ -3,6 +3,7 @@ import {Board} from "./Board";
 import {ShipSelector} from "./ShipSelector";
 import {getDimensions, getRandomInt, hullSize, uuidv4} from "../core/util";
 import {GameSettingsContext} from "../core/GameSettings";
+import {Targets} from "./EnemyBoard";
 
 const centerOffset = (template) => {
     const {rows, cols} = getDimensions(template);
@@ -155,7 +156,7 @@ export const isValidShipCount = (ships) => {
     return shipCountsOnBoard(ships).every(i => i === 0)
 }
 
-export function SetupBoard({usePlacedShips, title}) {
+export function SetupBoard({usePlacedShips, title, gameState}) {
     const [placedShips, setPlacedShips] = usePlacedShips;
     const [draggedShip, setDraggedShip] = useState(null);
     const [draggingPosition, setDraggingPosition] = useState({x: 0, y: 0});
@@ -301,12 +302,16 @@ export function SetupBoard({usePlacedShips, title}) {
     return (
         <Fragment>
             <div className="setup-wrapper">
-                <Board placedShips={placedShips}
-                       handleCellMouseEnter={handleCellMouseEnter}
-                       handlePlacedShipDragging={handleDraggingOnPlacedShip}
-                       draggedShip={draggedShip}
-                       hoveredCell={hoveredCell}
-                       draggingPosition={draggingPosition}/>
+                <div className="setup-wrapper__row">
+                    <Board placedShips={placedShips}
+                           handleCellMouseEnter={handleCellMouseEnter}
+                           handlePlacedShipDragging={handleDraggingOnPlacedShip}
+                           draggedShip={draggedShip}
+                           hoveredCell={hoveredCell}
+                           draggingPosition={draggingPosition}/>
+                    <Targets gameState={gameState}
+                             ships={placedShips}/>
+                </div>
                 <h2 className="u-h2">
                     {title}
                 </h2>
