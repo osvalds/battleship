@@ -93,11 +93,11 @@ function App() {
 
     const [gameSettings, setGameSettings] = useState(GAME_MODES.advanced);
 
-    const [playerPlacedShips, setPlayerPlacedShips] = useState(getRandomShipPlacement(gameSettings.shipConfig));
+    const [playerPlacedShips, setPlayerPlacedShips] = useState([]);
     const [playerPlacedShots, setPlayerPlacedShots] = useState([])
     const [playerPlacedAutoShots, setPlayerPlacedAutoShots] = useState([])
 
-    const [computerPlacedShips, setComputerPlacedShips] = useState(getRandomShipPlacement(gameSettings.shipConfig));
+    const [computerPlacedShips, setComputerPlacedShips] = useState([]);
     const [computerPlacedShots, setComputerPlacedShots] = useState([])
     const [computerPlacedAutoShots, setComputerPlacedAutoShots] = useState([])
 
@@ -156,7 +156,7 @@ function App() {
         setIsPlayerTurn])
 
     useEffect(() => {
-        if (computerPlacedShips.every(ship => ship.isSunken) ||
+        if ((computerPlacedShips.every(ship => ship.isSunken) && computerPlacedShips.length > 0) ||
             (playerPlacedShips.every(ship => ship.isSunken) && playerPlacedShips.length > 0)) {
             setGameState("FINISHED")
         }
