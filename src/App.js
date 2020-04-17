@@ -7,6 +7,7 @@ import {getRandomInt} from "./core/util"
 import Header from "./components/Header";
 import {GAME_MODES, GameSettingsContext} from "./core/GameSettings";
 import GameFinished from "./components/GameFinished";
+import useDidUpdateEffect, {useEffectExceptOnMount} from "./core/useDidUpdateEffect";
 
 const placeShot = ({x, y}, placedShots, setPlacedShots, placedComputerShots, setPlacedComputerShots, enemyShips, setEnemyShips, onMissedShot) => {
     let newPlaced = [...placedShots];
@@ -93,23 +94,13 @@ function App() {
 
     const [gameSettings, setGameSettings] = useState(GAME_MODES.advanced);
 
-    const [playerPlacedShips, setPlayerPlacedShips] = useState([]);
+    const [playerPlacedShips, setPlayerPlacedShips] = useState(getRandomShipPlacement(gameSettings.shipConfig));
     const [playerPlacedShots, setPlayerPlacedShots] = useState([])
     const [playerPlacedAutoShots, setPlayerPlacedAutoShots] = useState([])
 
-    const [computerPlacedShips, setComputerPlacedShips] = useState([]);
+    const [computerPlacedShips, setComputerPlacedShips] = useState(getRandomShipPlacement(gameSettings.shipConfig));
     const [computerPlacedShots, setComputerPlacedShots] = useState([])
     const [computerPlacedAutoShots, setComputerPlacedAutoShots] = useState([])
-
-    useEffect(() => {
-        setPlayerPlacedShips(getRandomShipPlacement(gameSettings.shipConfig))
-        setComputerPlacedShips(getRandomShipPlacement(gameSettings.shipConfig))
-        setPlayerPlacedShots([])
-        setPlayerPlacedAutoShots([])
-        setComputerPlacedShots([])
-        setComputerPlacedAutoShots([])
-        setGameState("SETUP")
-    }, [gameSettings, setPlayerPlacedShips, setComputerPlacedShips, setPlayerPlacedShots, setPlayerPlacedAutoShots, setComputerPlacedShots, setComputerPlacedAutoShots, setGameState])
 
     const resetGame = useCallback(() => {
         setPlayerPlacedShips(getRandomShipPlacement(gameSettings.shipConfig))
@@ -159,6 +150,16 @@ function App() {
             setGameState("FINISHED")
         }
     }, [playerPlacedShips, computerPlacedShips, setGameState])
+
+    useDidUpdateEffect(() => {
+        setPlayerPlacedShips(getRandomShipPlacement(gameSettings.shipConfig))
+        setComputerPlacedShips(getRandomShipPlacement(gameSettings.shipConfig))
+        setPlayerPlacedShots([])
+        setPlayerPlacedAutoShots([])
+        setComputerPlacedShots([])
+        setComputerPlacedAutoShots([])
+        setGameState("SETUP")
+    }, [gameSettings.name, setPlayerPlacedShips, setComputerPlacedShips, setPlayerPlacedShots, setPlayerPlacedAutoShots, setComputerPlacedShots, setComputerPlacedAutoShots, setGameState])
 
     return (
         <GameSettingsContext.Provider value={[gameSettings, setGameSettings]}>
