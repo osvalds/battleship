@@ -1,14 +1,32 @@
 .header {
   &__content {
-    max-width: 1200px;
-    margin: 24px auto;
-
+    margin: 12px 2%;
     display: flex;
     align-items: center;
     justify-content: space-between;
   }
   &__logo {
     user-select: none;
-    font-size: 32px;
+    font-size: 24px;
+    white-space: nowrap;
+  }
+
+  .button-group .button {
+    font-size: 12px;
+  }
+
+  @media only screen and (min-width: 768px) {
+    .button-group .button {
+      font-size: 16px;
+    }
+    &__content {
+      max-width: 1200px;
+      margin: 24px auto;
+    }
+
+    &__logo {
+      user-select: none;
+      font-size: 32px;
+    }
   }
 }
