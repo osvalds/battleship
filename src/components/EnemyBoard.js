@@ -1,10 +1,11 @@
 import React from "react";
 import {BlankBoard, BoardShip, cellSize, gap} from "./Board";
-import {getDimensions} from "../core/util";
+import {getDimensions, groupBy, hullSize} from "../core/util";
 import {placedShipsToBoard} from "./SetupBoard";
 import hull from "hull.js"
 import Button from "../core/Button";
 import classNames from "classnames";
+import {Ship} from "./Ship";
 
 function svgCoord(c, ct) {
     return (c + ct + 1) * cellSize + ((c + ct + 1) * gap)
@@ -192,6 +193,56 @@ export function getComputerShots(ship, placedShots, placedAutoShots) {
     return autoShots;
 }
 
+const templates = [
+    [[1]],
+    [[1, 1]],
+    [[1, 1, 1]],
+    [[1, 1, 1, 1]]
+]
+
+function TargetsRow({row}) {
+    const [size, ships] = row;
+
+    return (
+        <div className="targets__row">
+            {
+                ships.sort((x,y)=> x.isSunken - y.isSunken)
+                    .reverse()
+                    .map((ship, index) => {
+                    return <Ship ship={templates[size - 1]}
+                                 isSmall={true}
+                                 isSunken={ship.isSunken}
+                                 key={`key-${size}-${index}`}
+                                 setDraggedShip={() => null}/>
+                })
+            }
+        </div>
+    )
+}
+
+function Targets({ships, gameState}) {
+    if (ships.length === 0) {
+        return null
+    }
+
+    const TargetShips = groupBy(ships.map(ship => {
+        return {
+            size: hullSize(ship.template),
+            isSunken: ship.isSunken === true
+        }
+    }), "size")
+
+    const cn = classNames("targets", {"targets--faded": gameState !== "PLAYING"})
+
+    return (
+        <div className={cn}>
+            {
+                Object.entries(TargetShips).map((row, index) => <TargetsRow row={row} key={index}/>)
+            }
+        </div>
+    )
+}
+
 export function EnemyBoard({usePlacedShots, useEnemyShips, title, gameCanStart, isDisabled, onStartClick, gameState, useAutoShots, onMissedShot, showShips}) {
     const [placedShots, setPlacedShots] = usePlacedShots;
     const [placedComputerShots, setPlacedComputerShots] = useAutoShots;
@@ -222,29 +273,35 @@ export function EnemyBoard({usePlacedShots, useEnemyShips, title, gameCanStart, 
     const cn = classNames("enemy-board", {"enemy-board--disabled": isDisabled})
     return (
         <div className={cn}>
-            <BlankBoard handleCellMouseEnter={() => null}
-                        onCellClick={onCellClick}>
-                {showShips &&
-                enemyShips.map(ship => <BoardShip template={ship.template}
-                                                  uuid={ship.uuid}
-                                                  key={ship.uuid}
-                                                  handleMouseDown={() => null}
-                                                  x={ship.x}
-                                                  y={ship.y}/>)
+            <div className="enemy-board__row">
+                <BlankBoard handleCellMouseEnter={() => null}
+                            onCellClick={onCellClick}>
+                    {showShips &&
+                    enemyShips.map(ship => <BoardShip template={ship.template}
+                                                      uuid={ship.uuid}
+                                                      key={ship.uuid}
+                                                      handleMouseDown={() => null}
+                                                      x={ship.x}
+                                                      y={ship.y}/>)
+                    }
+                    <PlacedShots placedShots={placedShots}
+                                 shotSource="player"/>
+                    <PlacedShots placedShots={placedComputerShots}
+                                 shotSource="computer"/>
+                    <BombedShips ships={enemyShips.filter(s => s.hits?.length > 0)}/>
+                </BlankBoard>
+                <Targets
+                    gameState={gameState}
+                    ships={enemyShips}/>
+                {gameState === "SETUP" &&
+                <Button isDisabled={!gameCanStart}
+                        onClick={onStartClick}
+                        cn="button--start">
+                    Start pew-pew
+                </Button>
                 }
-                <PlacedShots placedShots={placedShots}
-                             shotSource="player"/>
-                <PlacedShots placedShots={placedComputerShots}
-                             shotSource="computer"/>
-                <BombedShips ships={enemyShips.filter(s => s.hits?.length > 0)}/>
-            </BlankBoard>
-            {gameState === "SETUP" &&
-            <Button isDisabled={!gameCanStart}
-                    onClick={onStartClick}
-                    cn="button--start">
-                Start pew-pew
-            </Button>
-            }
+
+            </div>
             <h2 className="u-h2">
                 {title}
             </h2>

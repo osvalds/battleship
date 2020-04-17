@@ -1,6 +1,7 @@
 .ship {
   width: 100%;
   margin-right: $max-width / 22;
+
   &:last-of-type {
     margin-right: 0;
   }
@@ -30,5 +31,31 @@
   &--dragged-true {
     position: fixed;
     transform: translate(-50%, -50%);
+  }
+
+  &--small {
+    margin-right: $max-width / 44;
+
+    &.ship--1 {
+      max-width: $max-width / 11 / 2;
+    }
+
+    &.ship--2 {
+      max-width: $max-width / 11 * 2 / 2;
+    }
+
+    &.ship--3 {
+      max-width: $max-width / 11 * 3 / 2;
+    }
+
+    &.ship--4 {
+      max-width: $max-width / 11 * 4 / 2;
+    }
+  }
+
+  &--sunken {
+    rect {
+      fill: var(--button-primary-bgcolor);
+    }
   }
 }

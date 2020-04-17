@@ -1,8 +1,9 @@
 import React, {useCallback} from "react";
+import {getDimensions} from "../core/util";
+import classNames from "classnames"
 
-const ShipContent = React.memo(({ship, setDraggedShip, cellSize = 10, gap = 1}) => {
-    const rows = ship.length;
-    const cols = ship[0].length;
+const ShipContent = React.memo(({ship, setDraggedShip, cellSize = 10, gap = 1, isSunken, isSmall}) => {
+    const {rows, cols} = getDimensions(ship);
 
     const containerWidth = cellSize * cols + cols - 1;
     const containerHeight = cellSize * rows + rows - 1;
@@ -11,9 +12,10 @@ const ShipContent = React.memo(({ship, setDraggedShip, cellSize = 10, gap = 1}) 
         setDraggedShip(ship, x, y)
     }, [setDraggedShip, ship]);
 
+    const cn = classNames(`ship ship--${cols}`, {"ship--small": isSmall}, {"ship--sunken": isSunken})
 
     return (
-        <div className={`ship ship--${cols}`}
+        <div className={cn}
              onMouseDown={e => {
                  handleGrabbingShip(-1, -1)
              }}>
@@ -44,11 +46,11 @@ const ShipContent = React.memo(({ship, setDraggedShip, cellSize = 10, gap = 1}) 
     )
 });
 
-export const Ship = React.memo(({ship, setDraggedShip}) => {
-    if (ship === null) {
+export const Ship = React.memo((props) => {
+    if (props.ship === null) {
         return null;
     } else {
-        return <ShipContent ship={ship} setDraggedShip={setDraggedShip}/>
+        return <ShipContent {...props}/>
     }
 
 })

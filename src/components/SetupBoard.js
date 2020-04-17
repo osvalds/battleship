@@ -1,7 +1,7 @@
 import React, {Fragment, useCallback, useContext, useEffect, useState} from 'react';
 import {Board} from "./Board";
 import {ShipSelector} from "./ShipSelector";
-import {getDimensions, getRandomInt, uuidv4} from "../core/util";
+import {getDimensions, getRandomInt, hullSize, uuidv4} from "../core/util";
 import {GameSettingsContext} from "../core/GameSettings";
 
 const centerOffset = (template) => {
@@ -143,14 +143,10 @@ export const getRandomShipPlacement = (shipConfig) => {
     return placedShips;
 };
 
-const templateSize = (template) => {
-    return template.flat(2).reduce((previous, current) => current += previous);
-}
-
 const shipCountsOnBoard = (placedShips) => {
     let validShipCount = [4, 3, 2, 1];
     for (let placedShip of placedShips) {
-        validShipCount[templateSize(placedShip.template) - 1]--;
+        validShipCount[hullSize(placedShip.template) - 1]--;
     }
     return validShipCount;
 }

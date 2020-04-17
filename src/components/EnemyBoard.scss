@@ -29,15 +29,24 @@
 }
 
 .enemy-board {
-  position: relative;
   grid-area: enemy-board;
 
   .board-ship {
     fill: #fff;
   }
+
+  &__row {
+    position: relative;
+    display: flex;
+    align-items: center;
+    .targets {
+      margin-left: 20px;
+    }
+  }
+
   .button--start {
     position: absolute;
-    top: 40%;
+    top: 50%;
     left: 10%;
     //transform: translate(-50%, -50%);
   }
@@ -56,5 +65,16 @@
         background: rgba(34, 40, 49, .5);
       }
     }
+  }
+}
+
+.targets {
+  &--faded {
+    opacity: .6;
+  }
+
+  &__row {
+    margin-bottom: $max-width/ 44;
+    display: flex;
   }
 }

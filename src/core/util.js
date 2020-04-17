@@ -28,3 +28,18 @@ export function getRandomInt(min, max) {
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
+
+export const hullSize = (template) => {
+    return template.flat(2).reduce((previous, current) => current += previous);
+}
+
+export function groupBy(objectArray, property) {
+    return objectArray.reduce(function (acc, obj) {
+        let key = obj[property];
+        if (!acc[key]) {
+            acc[key] = [];
+        }
+        acc[key].push(obj);
+        return acc;
+    }, {});
+}
