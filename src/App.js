@@ -179,6 +179,7 @@ function App() {
                     {gameState !== "SETUP" &&
                     <PlayerBoard
                         title="Your‍ board"
+                        gameState={gameState}
                         isDisabled={gameState !== "PLAYING"}
                         usePlacedShips={[playerPlacedShips, setPlayerPlacedShips]}
                         useTakenShots={[computerPlacedShots, setComputerPlacedShots]}

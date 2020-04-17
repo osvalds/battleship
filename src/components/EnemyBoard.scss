@@ -40,14 +40,6 @@
     position: relative;
     display: flex;
     align-items: center;
-
-
-    .targets {
-      position: absolute;
-      top: 50%;
-      right: 0;
-      transform: translateY(-50%);
-    }
   }
 
   .button--start {
@@ -75,14 +67,12 @@
 
   @media only screen and (min-width: 768px) {
     text-align: left;
-    &__row {
-      padding-right: 130px;
-    }
   }
 }
 
 .targets {
   display: none;
+  margin-left: 7px;
 
   &--faded {
     opacity: .6;

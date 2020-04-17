@@ -220,7 +220,7 @@ function TargetsRow({row}) {
     )
 }
 
-function Targets({ships, gameState}) {
+export function Targets({ships, gameState}) {
     if (ships.length === 0) {
         return null
     }
