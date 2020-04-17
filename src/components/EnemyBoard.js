@@ -1,5 +1,5 @@
 import React from "react";
-import {BlankBoard, cellSize, gap} from "./Board";
+import {BlankBoard, BoardShip, cellSize, gap} from "./Board";
 import {getDimensions} from "../core/util";
 import {placedShipsToBoard} from "./SetupBoard";
 import hull from "hull.js"
@@ -29,7 +29,7 @@ export function PlacedShots({placedShots, shotSource}) {
                                 className="placed-shots__shot"
                                 cx={svgCoord(x, 0) + cellSize / 2}
                                 cy={svgCoord(y, 0) + cellSize / 2}
-                                r="1.75"/>
+                                r="1.5"/>
                         </g>
                     )
                 })}
@@ -192,7 +192,7 @@ export function getComputerShots(ship, placedShots, placedAutoShots) {
     return autoShots;
 }
 
-export function EnemyBoard({usePlacedShots, useEnemyShips, title, gameCanStart, isDisabled, onStartClick, gameState, useAutoShots, onMissedShot}) {
+export function EnemyBoard({usePlacedShots, useEnemyShips, title, gameCanStart, isDisabled, onStartClick, gameState, useAutoShots, onMissedShot, showShips}) {
     const [placedShots, setPlacedShots] = usePlacedShots;
     const [placedComputerShots, setPlacedComputerShots] = useAutoShots;
 
@@ -224,6 +224,14 @@ export function EnemyBoard({usePlacedShots, useEnemyShips, title, gameCanStart, 
         <div className={cn}>
             <BlankBoard handleCellMouseEnter={() => null}
                         onCellClick={onCellClick}>
+                {showShips &&
+                enemyShips.map(ship => <BoardShip template={ship.template}
+                                                  uuid={ship.uuid}
+                                                  key={ship.uuid}
+                                                  handleMouseDown={() => null}
+                                                  x={ship.x}
+                                                  y={ship.y}/>)
+                }
                 <PlacedShots placedShots={placedShots}
                              shotSource="player"/>
                 <PlacedShots placedShots={placedComputerShots}

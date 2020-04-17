@@ -174,12 +174,12 @@ function App() {
                 <div className="App__row">
                     {gameState === "SETUP" &&
                     <SetupBoard
-                        title="🧗‍ board"
+                        title="Your‍ board"
                         usePlacedShips={[playerPlacedShips, setPlayerPlacedShips]}/>
                     }
                     {gameState !== "SETUP" &&
                     <PlayerBoard
-                        title="🧗‍ board"
+                        title="Your‍ board"
                         isDisabled={gameState !== "PLAYING"}
                         usePlacedShips={[playerPlacedShips, setPlayerPlacedShips]}
                         useTakenShots={[computerPlacedShots, setComputerPlacedShots]}
@@ -187,11 +187,12 @@ function App() {
                     />
                     }
                     <EnemyBoard
-                        title="🤖's board"
+                        title="Computer's board"
                         gameCanStart={isValidShipCount(playerPlacedShips)}
                         onMissedShot={() => setIsPlayerTurn(false)}
                         gameState={gameState}
                         onStartClick={() => setGameState("PLAYING")}
+                        showShips={gameState === "FINISHED"}
                         isDisabled={gameState !== "PLAYING" || !isPlayerTurn}
                         useEnemyShips={[computerPlacedShips, setComputerPlacedShips]}
                         usePlacedShots={[playerPlacedShots, setPlayerPlacedShots]}

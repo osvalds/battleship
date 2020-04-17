@@ -2,13 +2,13 @@
 
   &--player {
     .placed-shots__shot {
-      fill: black;
+      fill: var(--body-background);
     }
   }
 
   &--computer {
     .placed-shots__shot {
-      fill: gray;
+      fill: #4e4e4e;
     }
   }
 }
@@ -32,6 +32,9 @@
   position: relative;
   grid-area: enemy-board;
 
+  .board-ship {
+    fill: #fff;
+  }
   .button--start {
     position: absolute;
     top: 40%;
