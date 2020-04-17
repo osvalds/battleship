@@ -23,25 +23,31 @@ time, mark, audio, video {
   font: inherit;
   vertical-align: baseline;
 }
+
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
   display: block;
 }
+
 body {
   line-height: 1;
 }
+
 ol, ul {
   list-style: none;
 }
+
 blockquote, q {
   quotes: none;
 }
+
 blockquote:before, blockquote:after,
 q:before, q:after {
   content: '';
   content: none;
 }
+
 table {
   border-collapse: collapse;
   border-spacing: 0;
@@ -57,9 +63,11 @@ body {
   font-family: monospace;
   color: white;
 }
+
 :root {
   --body-background: #222831;
 }
+
 html, body, #root, .App {
   height: 100%;
   background-color: var(--body-background);
@@ -76,9 +84,9 @@ html, body, #root, .App {
     width: 100%;
     max-width: 1200px;
     display: grid;
-    grid-template-areas:  "player-board enemy-board"
-                          "ship-selector ship-selector";
+    grid-template-areas: "player-board enemy-board" "ship-selector ship-selector";
     grid-template-columns: repeat(2, minmax(400px, 1fr));
+    grid-template-rows: -webkit-max-content;
 
   }
 }

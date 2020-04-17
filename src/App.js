@@ -130,8 +130,6 @@ function App() {
 
                 if (woundedShip[0]) {
                     const [x, y] = chooseTarget(gameSettings.name, woundedShip[0], computerPlacedShots, computerPlacedAutoShots)
-                    // console.log("target wounded");
-                    // console.log()
                     placeShot({x, y},
                         computerPlacedShots, setComputerPlacedShots,
                         computerPlacedAutoShots, setComputerPlacedAutoShots,
